@@ -29,66 +29,9 @@
 진하윤:
 
 ## 파일 구조
-src
- ┣ main
- ┃ ┣ java
- ┃ ┃ ┣ com
- ┃ ┃ ┃ ┣ example
- ┃ ┃ ┃ ┃ ┣ controller
- ┃ ┃ ┃ ┃ ┃ ┣ AuthController.java
- ┃ ┃ ┃ ┃ ┃ ┣ UserController.java
- ┃ ┃ ┃ ┃ ┃ ┗ AdminController.java
- ┃ ┃ ┃ ┃ ┣ model
- ┃ ┃ ┃ ┃ ┃ ┣ User.java
- ┃ ┃ ┃ ┃ ┃ ┗ Course.java
- ┃ ┃ ┃ ┃ ┣ repository
- ┃ ┃ ┃ ┃ ┃ ┣ UserRepository.java
- ┃ ┃ ┃ ┃ ┃ ┗ CourseRepository.java
- ┃ ┃ ┃ ┃ ┣ service
- ┃ ┃ ┃ ┃ ┃ ┣ AuthService.java
- ┃ ┃ ┃ ┃ ┃ ┣ UserService.java
- ┃ ┃ ┃ ┃ ┃ ┗ AdminService.java
- ┃ ┃ ┃ ┃ ┣ security
- ┃ ┃ ┃ ┃ ┃ ┣ SecurityConfig.java
- ┃ ┃ ┃ ┃ ┃ ┗ JwtAuthenticationEntryPoint.java
- ┃ ┃ ┃ ┃ ┣ dto
- ┃ ┃ ┃ ┃ ┃ ┣ LoginRequest.java
- ┃ ┃ ┃ ┃ ┃ ┗ UserResponse.java
- ┃ ┃ ┃ ┃ ┣ exception
- ┃ ┃ ┃ ┃ ┃ ┣ GlobalExceptionHandler.java
- ┃ ┃ ┃ ┃ ┃ ┗ ResourceNotFoundException.java
- ┃ ┃ ┃ ┃ ┣ utils
- ┃ ┃ ┃ ┃ ┃ ┣ JwtUtils.java
- ┃ ┃ ┃ ┃ ┃ ┗ UserMapper.java
- ┃ ┃ ┃ ┣ resources
- ┃ ┃ ┃ ┃ ┣ application.properties
- ┃ ┃ ┃ ┃ ┗ static
- ┃ ┃ ┃ ┃ ┃ ┣ css
- ┃ ┃ ┃ ┃ ┃ ┃ ┗ style.css
- ┃ ┃ ┃ ┃ ┃ ┣ js
- ┃ ┃ ┃ ┃ ┃ ┃ ┗ script.js
- ┃ ┃ ┃ ┣ webapp
- ┃ ┃ ┃ ┃ ┣ WEB-INF
- ┃ ┃ ┃ ┃ ┃ ┗ web.xml
- ┃ ┃ ┃ ┣ test
- ┃ ┃ ┃ ┃ ┣ java
- ┃ ┃ ┃ ┃ ┃ ┣ com
- ┃ ┃ ┃ ┃ ┃ ┃ ┣ example
- ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ AuthServiceTest.java
- ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ UserControllerTest.java
- ┃ ┃ ┃ ┃ ┃ ┃ ┗ ApplicationTests.java
- ┃ ┃ ┃ ┣ resources
- ┃ ┃ ┃ ┃ ┣ application.properties
- ┃ ┃ ┃ ┃ ┗ static
- ┃ ┃ ┃ ┃ ┃ ┣ css
- ┃ ┃ ┃ ┃ ┃ ┃ ┗ style.css
- ┃ ┃ ┃ ┃ ┃ ┣ js
- ┃ ┃ ┃ ┃ ┃ ┃ ┗ script.js
- ┣ pom.xml
- ┣ Application.java
- ┣ application.properties
- ┣ .gitignore
- ┗ README.md
+'''
+org.findex.team2.sb15findexteam02/
+'''
 
 ## 구현 홈페이지
 (링크)
