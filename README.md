@@ -30,7 +30,19 @@
 
 ## 파일 구조
 ```
-org.findex.team2.sb15findexteam02/
+src
+ ┗ main
+   ┗ java
+     ┗ org.findex.team2.sb15findexteam02
+       ┣ controller
+       ┣ dto
+       ┃ ┣ request
+       ┃ ┗ response
+       ┣ exception
+       ┣ model
+       ┣ repository
+       ┣ service
+       ┗ Sb15FindexTeam02Application.java
 ```
 
 ## 구현 홈페이지
