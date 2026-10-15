@@ -10,12 +10,12 @@ import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
-public class BaseUpdatebleModel extends BaseModel{
+public class BaseUpdatableModel extends BaseModel{
     @LastModifiedDate
     @Column
     protected LocalDateTime updatedAt;
 
-    protected BaseUpdatebleModel(){
+    protected BaseUpdatableModel(){
 
     }
 }
