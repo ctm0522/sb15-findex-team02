@@ -33,7 +33,7 @@ create table index_infos(
     index_category_id int references  index_categories(id) NOT NULL ,
     index_name varchar(20) NOT NULL ,
     employed_items_count int NOT NULL ,
-    base_point_time timestamp NOT NULL ,
+    base_point_time DATE NOT NULL ,
     base_index decimal(20,6) NOT NULL ,
     source_type varchar(10) check (source_type in ('사용자', 'Open API')) NOT NULL ,
     favorite boolean NOT NULL ,
