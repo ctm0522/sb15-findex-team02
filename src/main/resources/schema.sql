@@ -30,7 +30,7 @@ create table index_infos(
     id serial PRIMARY KEY ,
     created_at timestamp NOT NULL ,
     updated_at timestamp,
-    index_category_id serial references  index_categories(id) NOT NULL ,
+    index_category_id int references  index_categories(id) NOT NULL ,
     index_name varchar(20) NOT NULL ,
     employed_items_count int NOT NULL ,
     base_point_time timestamp NOT NULL ,
@@ -38,5 +38,4 @@ create table index_infos(
     source_type varchar(10) check (source_type in ('사용자', 'Open API')) NOT NULL ,
     favorite boolean NOT NULL ,
     unique (index_category_id,index_name)
-
 )
