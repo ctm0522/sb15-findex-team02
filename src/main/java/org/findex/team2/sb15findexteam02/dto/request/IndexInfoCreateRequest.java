@@ -1,5 +1,6 @@
 package org.findex.team2.sb15findexteam02.dto.request;
 
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ public class IndexInfoCreateRequest {
   String indexClassification;
   String indexName;
   Integer employedItemsCount;
-  String basePointIntime;
+  LocalDate basePointInTime;
   Long baseIndex;
   Boolean favorite;
 }
