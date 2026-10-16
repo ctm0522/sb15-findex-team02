@@ -11,5 +11,5 @@ public class IndexInfoUpdateRequest {
   Integer employedItemsCount;
   String basePointInTime;
   Long baseIndex;
-  boolean favorite;
+  Boolean favorite;
 }

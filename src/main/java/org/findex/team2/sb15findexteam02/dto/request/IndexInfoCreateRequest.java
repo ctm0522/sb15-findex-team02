@@ -13,5 +13,5 @@ public class IndexInfoCreateRequest {
   Integer employedItemsCount;
   String basePointIntime;
   Long baseIndex;
-  boolean favorite;
+  Boolean favorite;
 }
