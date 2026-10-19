@@ -56,7 +56,7 @@ create table auto_sync_config(
     id serial PRIMARY KEY,
     created_at timestamp NOT NULL,
     updated_at timestamp,
-    index_info_id int references index_infos(id) NOT NULL,
+    index_info_id int references index_infos(id) on delete cascade NOT NULL,
     enabled boolean NOT NULL,
     schedule varchar(10) NOT NULL,
     last_synced_at timestamp,
@@ -95,12 +95,12 @@ CREATE TABLE index_data
 
     CONSTRAINT fk_index_data_index_info
         FOREIGN KEY (index_info_id)
-            REFERENCES index_infos (id)
+            REFERENCES index_infos (id) on delete cascade
 );
 
 
 CREATE TABLE sync_job_index_infos (
-    sync_jobs_id int references sync_jobs(id),
-    index_info_id int references index_infos(id),
+    sync_jobs_id int references sync_jobs(id) on delete cascade NOT NULL ,
+    index_info_id int references index_infos(id) on delete set null ,
     primary key (sync_jobs_id,index_info_id)
 )
