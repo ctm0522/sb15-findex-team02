@@ -33,7 +33,7 @@ public class SyncJob extends BaseModel{
     private LocalDate endDate;
 
     @Column
-    private int totalCount;
+    private Integer totalCount;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

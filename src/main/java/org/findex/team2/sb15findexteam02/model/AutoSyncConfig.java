@@ -1,15 +1,18 @@
 package org.findex.team2.sb15findexteam02.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+
+
+@Entity
+@Table(name = "auto_sync_config")
+@Getter
 public class AutoSyncConfig extends BaseUpdatableModel{
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "index_category_id",nullable = false)
+    @JoinColumn(name = "index_info_id",nullable = false)
     private IndexInfo indexInfo;
 
     @Column(nullable = false)

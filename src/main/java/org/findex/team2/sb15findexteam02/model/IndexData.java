@@ -29,16 +29,16 @@ public class IndexData extends BaseUpdatableModel{
     private BigDecimal closingPrice;
 
     @Column(precision = 20, scale = 6, nullable = false)
-    private BigDecimal high_price;
+    private BigDecimal highPrice;
 
     @Column(precision = 20, scale = 6, nullable = false)
-    private BigDecimal low_price;
+    private BigDecimal lowPrice;
 
     @Column(precision = 20, scale = 6, nullable = false)
     private BigDecimal versus;
 
     @Column(precision = 15, scale = 6, nullable = false)
-    private BigDecimal fluctuation_rate;
+    private BigDecimal fluctuationRate;
 
     @Column(nullable = false)
     private int tradingQuantity;

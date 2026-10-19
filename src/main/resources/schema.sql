@@ -101,6 +101,6 @@ CREATE TABLE index_data
 
 CREATE TABLE sync_job_index_infos (
     sync_jobs_id int references sync_jobs(id) on delete cascade NOT NULL ,
-    index_info_id int references index_infos(id) on delete set null ,
+    index_info_id int references index_infos(id) on delete cascade NOt NULL ,
     primary key (sync_jobs_id,index_info_id)
 )

@@ -11,7 +11,7 @@ import lombok.Getter;
 public class IndexCategory extends BaseUpdatableModel {
 
     @Column(nullable = false,unique = true,length = 20)
-    private String name;
+    private String categoryName;
 
     protected IndexCategory(){
 
