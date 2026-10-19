@@ -35,7 +35,7 @@ create table index_infos(
     employed_items_count int NOT NULL ,
     base_point_time DATE NOT NULL ,
     base_index decimal(20,6) NOT NULL ,
-    source_type varchar(10) check (source_type in ('사용자', 'Open API')) NOT NULL ,
+    source_type varchar(10) check (source_type in ('USER', 'OPEN_API')) NOT NULL ,
     favorite boolean NOT NULL ,
     unique (index_category_id,index_name)
 )
@@ -52,7 +52,7 @@ CREATE TABLE index_data {
 
     base_date DATE NOT NULL
     source_type VARCHAR(10) NOT NULL
-    CHECK (source_type IN ('사용자'. 'Open API')),
+    CHECK (source_type IN ('USER'. 'OPEN_API')),
 
     market_price DECIMAL(20, 6) NOT NULL
     closing_price DECIMAL(20, 6) NOT NULL
