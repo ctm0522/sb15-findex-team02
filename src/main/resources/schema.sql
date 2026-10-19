@@ -54,9 +54,9 @@ create table sync_jobs(
 
 create table auto_sync_config(
     id serial PRIMARY KEY,
-    created_at timestamp,
+    created_at timestamp NOT NULL,
     updated_at timestamp,
-    index_info_id int NOT NULL,
+    index_info_id int references index_infos(id) NOT NULL,
     enabled boolean NOT NULL,
     schedule varchar(10) NOT NULL,
     last_synced_at timestamp,
