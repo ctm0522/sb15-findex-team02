@@ -72,3 +72,9 @@ CREATE TABLE index_data
         FOREIGN KEY (index_info_id)
             REFERENCES index_info (id)
 );
+
+CREATE TABLE sync_job_index_infos (
+    sync_jobs_id int references sync_jobs(id),
+    index_info_id int references index_infos(id),
+    primary key (sync_jobs_id,index_info_id)
+)
