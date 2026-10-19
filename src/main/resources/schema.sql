@@ -40,6 +40,30 @@ create table index_infos(
     unique (index_category_id,index_name)
 );
 
+create table sync_jobs(
+    id serial PRIMARY KEY,
+    created_at timestamp NOT NULL,
+    job_time timestamp NOT NULL,
+    status varchar(10) check ( status in ('SUCCESS', 'FAILED') ) NOT NULL,
+    worker varchar(50) NOT NULL,
+    job_type varchar(15) check (job_type in ('INDEX_INFO', 'INDEX_DATA')) NOT NULL,
+    start_date date,
+    end_date date,
+    total_count int
+);
+
+create table auto_sync_config(
+    id serial PRIMARY KEY,
+    created_at timestamp NOT NULL,
+    updated_at timestamp,
+    index_info_id int references index_infos(id) NOT NULL,
+    enabled boolean NOT NULL,
+    schedule varchar(10) NOT NULL,
+    last_synced_at timestamp,
+
+    CONSTRAINT uk_auto_sync_config_index_schedule UNIQUE (index_info_id, schedule)
+);
+
 --------------------------------------------
 
 CREATE TABLE index_data
