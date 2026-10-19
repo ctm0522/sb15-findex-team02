@@ -30,7 +30,7 @@ public class IndexInfo extends BaseUpdatableModel{
     private BigDecimal baseIndex;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     private SourceType sourceType;
 
     @Column(nullable = false)
