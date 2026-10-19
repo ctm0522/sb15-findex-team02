@@ -48,7 +48,7 @@ CREATE TABLE index_data {
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP,
 
-    index_info_id SERIAL NOT NULL,
+    index_info_id INT NOT NULL,
 
     base_date DATE NOT NULL
     source_type VARCHAR(10) NOT NULL
