@@ -44,7 +44,7 @@ create table sync_jobs(
     id serial PRIMARY KEY,
     created_at timestamp NOT NULL,
     job_time timestamp NOT NULL,
-    status varchar(10) NOT NULL,
+    status varchar(10) check ( status in ('SUCCESS', 'FAILED') ) NOT NULL,
     worker varchar(50) NOT NULL,
     job_type varchar(15) check (job_type in ('INDEX_INFO', 'INDEX_DATA')) NOT NULL,
     start_date date,
