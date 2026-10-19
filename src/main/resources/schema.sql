@@ -41,8 +41,8 @@ create table index_infos(
 );
 
 create table sync_jobs(
-    id int PRIMARY KEY,
-    created_at timestamp,
+    id serial PRIMARY KEY,
+    created_at timestamp NOT NULL,
     job_time timestamp NOT NULL,
     status varchar(10) NOT NULL,
     worker varchar(50) NOT NULL,
@@ -53,10 +53,10 @@ create table sync_jobs(
 );
 
 create table auto_sync_config(
-    id int PRIMARY KEY,
+    id serial PRIMARY KEY,
     created_at timestamp,
     updated_at timestamp,
-    index_info_id serial NOT NULL,
+    index_info_id int NOT NULL,
     enabled boolean NOT NULL,
     schedule varchar(10) NOT NULL,
     last_synced_at timestamp,
