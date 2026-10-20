@@ -10,7 +10,7 @@ import org.findex.team2.sb15findexteam02.model.SourceType;
 import java.util.List;
 
 public interface IndexDataService {
-    CursorPageResponseIndexDataDto findAll();
+    CursorPageResponseIndexDataDto findAll(IndexDataSearchRequest request);
     IndexDataDto create(IndexDataCreateRequest request, SourceType sourceType);
     void delete(Long id);
     IndexDataDto update(Long id, IndexDataUpdateRequest request, SourceType sourceType);
