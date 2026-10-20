@@ -53,5 +53,36 @@ public class IndexData extends BaseUpdatableModel{
 
     }
 
+    public IndexData(IndexInfo indexInfo, LocalDate baseDate, BigDecimal marketPrice, BigDecimal closingPrice,
+                        BigDecimal highPrice, BigDecimal lowPrice,BigDecimal versus, BigDecimal fluctuationRate, Long tradingQuantity,
+                        Long tradingPrice, Long marketTotalAmount, SourceType sourceType){
+        this.indexInfo = indexInfo;
+        this.baseDate = baseDate;
+        this.marketPrice = marketPrice;
+        this.closingPrice = closingPrice;
+        this.highPrice = highPrice;
+        this.lowPrice = lowPrice;
+        this.versus = versus;
+        this.fluctuationRate = fluctuationRate;
+        this.tradingQuantity = tradingQuantity;
+        this.tradingPrice = tradingPrice;
+        this.marketTotalAmount = marketTotalAmount;
+        this.sourceType = sourceType;
+
+    }
+
+    public void update(BigDecimal marketPrice, BigDecimal closingPrice, BigDecimal highPrice, BigDecimal lowPrice,
+                       BigDecimal versus, BigDecimal fluctuationRate, Long tradingQuantity, Long tradingPrice, Long marketTotalAmount, SourceType sourceType){
+        this.marketPrice = marketPrice;
+        this.closingPrice = closingPrice;
+        this.highPrice = highPrice;
+        this.lowPrice = lowPrice;
+        this.versus = versus;
+        this.fluctuationRate = fluctuationRate;
+        this.tradingQuantity = tradingQuantity;
+        this.tradingPrice = tradingPrice;
+        this.marketTotalAmount =marketTotalAmount;
+        this.sourceType=sourceType;
+    }
 
 }

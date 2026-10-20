@@ -17,4 +17,8 @@ public class IndexCategory extends BaseUpdatableModel {
 
     }
 
+    public IndexCategory(String categoryName){
+        this.categoryName=categoryName;
+    }
+
 }

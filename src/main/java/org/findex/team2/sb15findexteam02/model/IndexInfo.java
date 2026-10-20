@@ -34,5 +34,31 @@ public class IndexInfo extends BaseUpdatableModel{
     @Column(nullable = false)
     private boolean favorite;
 
+    protected IndexInfo(){
 
+    }
+
+    public IndexInfo(IndexCategory indexCategory, String indexName, int employedItemsCount,
+                     LocalDate basePointTime, BigDecimal baseIndex, SourceType sourceType, boolean favorite){
+        this.indexCategory = indexCategory;
+        this.indexName = indexName;
+        this.employedItemsCount = employedItemsCount;
+        this.basePointTime = basePointTime;
+        this.baseIndex = baseIndex;
+        this.sourceType = sourceType;
+        this.favorite = favorite;
+    }
+
+    public void update(int employedItemsCount, LocalDate basePointTime, BigDecimal baseIndex, Boolean favorite, SourceType sourceType){
+        this.employedItemsCount = employedItemsCount;
+        this.basePointTime = basePointTime;
+        this.baseIndex = baseIndex;
+        this.favorite = favorite;
+        this.sourceType = sourceType;
+    }
+
+
+    public void setIndexCategory(IndexCategory indexCategory) {
+        this.indexCategory = indexCategory;
+    }
 }

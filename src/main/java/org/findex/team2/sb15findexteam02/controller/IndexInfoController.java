@@ -4,6 +4,7 @@ import org.findex.team2.sb15findexteam02.dto.request.IndexInfoCreateRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexInfoSearchRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexInfoUpdateRequest;
 import org.findex.team2.sb15findexteam02.dto.response.IndexInfoDto;
+import org.findex.team2.sb15findexteam02.service.IndexInfoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
