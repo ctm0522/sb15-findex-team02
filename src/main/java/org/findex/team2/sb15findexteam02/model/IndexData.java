@@ -41,13 +41,13 @@ public class IndexData extends BaseUpdatableModel{
     private BigDecimal fluctuationRate;
 
     @Column(nullable = false)
-    private int tradingQuantity;
+    private Long tradingQuantity;
 
-    @Column(precision = 25, scale = 3, nullable = false)
-    private BigDecimal tradingPrice;
+    @Column(nullable = false)
+    private Long tradingPrice;
 
-    @Column(precision = 27, scale = 3)
-    private BigDecimal marketTotalAmount;
+    @Column(nullable = false)
+    private Long marketTotalAmount;
 
     protected IndexData(){
 
