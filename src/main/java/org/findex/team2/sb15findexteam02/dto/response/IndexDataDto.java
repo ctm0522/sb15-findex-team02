@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.findex.team2.sb15findexteam02.model.IndexData;
 import org.findex.team2.sb15findexteam02.model.SourceType;
 
 import javax.sound.midi.spi.SoundbankReader;
@@ -28,4 +29,10 @@ public class IndexDataDto {
     Long tradingQuantity;
     Long tradingPrice;
     Long marketTotalAmount;
+
+    public static IndexDataDto from(IndexData indexData){
+        return new IndexDataDto(indexData.getId(), indexData.getIndexInfo().getId(), indexData.getBaseDate(), indexData.getSourceType(), indexData.getMarketPrice(),
+                indexData.getClosingPrice(),indexData.getHighPrice(),indexData.getLowPrice(),indexData.getVersus(),indexData.getFluctuationRate(),
+                indexData.getTradingQuantity(),indexData.getTradingPrice(),indexData.getMarketTotalAmount());
+    }
 }

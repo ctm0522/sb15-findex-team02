@@ -2,6 +2,7 @@ package org.findex.team2.sb15findexteam02.service.basic;
 
 import lombok.RequiredArgsConstructor;
 import org.findex.team2.sb15findexteam02.dto.request.IndexInfoCreateRequest;
+import org.findex.team2.sb15findexteam02.dto.request.IndexInfoSearchRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexInfoUpdateRequest;
 import org.findex.team2.sb15findexteam02.dto.response.CursorPageResponseIndexInfoDto;
 import org.findex.team2.sb15findexteam02.dto.response.IndexInfoDto;
@@ -24,7 +25,7 @@ public class BasicIndexInfoService implements IndexInfoService {
     private final IndexCategoryRepository indexCategoryRepository;
 
     @Override
-    public CursorPageResponseIndexInfoDto findAll() {
+    public CursorPageResponseIndexInfoDto findAll(IndexInfoSearchRequest request) {
         return null;
     }
 
@@ -42,9 +43,9 @@ public class BasicIndexInfoService implements IndexInfoService {
 
         IndexInfo indexInfo = new IndexInfo(category,request.getIndexName(),request.getEmployedItemsCount(),
                 request.getBasePointInTime(),request.getBaseIndex(),sourceType,request.getFavorite());
-        indexInfoRepository.save(indexInfo);
+        IndexInfo createIndexInfo = indexInfoRepository.save(indexInfo);
 
-        return IndexInfoDto.from(indexInfo);
+        return IndexInfoDto.from(createIndexInfo);
     }// todo 나중에 오토싱크 생성 추가 삭제는 ddl cascade가 할 것
 
     @Override
