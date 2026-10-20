@@ -15,6 +15,7 @@ import org.findex.team2.sb15findexteam02.repository.IndexCategoryRepository;
 import org.findex.team2.sb15findexteam02.repository.IndexDataRepository;
 import org.findex.team2.sb15findexteam02.repository.IndexInfoRepository;
 import org.findex.team2.sb15findexteam02.service.IndexDataService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,7 +78,8 @@ public class BasicIndexDataService implements IndexDataService {
     }
 
     @Override
-    public void toCSV() {
+    public ResponseEntity<?> toCSV() {
 
+        return null;
     }
 }
