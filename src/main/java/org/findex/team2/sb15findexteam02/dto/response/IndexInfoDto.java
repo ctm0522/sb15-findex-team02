@@ -17,5 +17,4 @@ public class IndexInfoDto {
   Long baseIndex;
   String sourceType;
   Boolean favorite;
-
 }
