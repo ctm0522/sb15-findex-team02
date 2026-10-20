@@ -7,7 +7,9 @@ import org.findex.team2.sb15findexteam02.dto.response.CursorPageResponseIndexDat
 import org.findex.team2.sb15findexteam02.dto.response.IndexChartDto;
 import org.findex.team2.sb15findexteam02.dto.response.IndexDataDto;
 import org.findex.team2.sb15findexteam02.dto.response.RankedIndexPerformanceDto;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -77,5 +79,19 @@ public class IndexDataController {
         return ResponseEntity.ok(
                 indexDataService.favorite(periodType)
         );
+    }
+
+    @GetMapping("/export/csv")
+    public ResponseEntity<byte[]> toCSV(
+            @ModelAttribute IndexDataSearchRequest request
+    ) {
+        byte[] csv = indexDataService.toCSV(request);
+
+        return ResponseEntity.ok().header(
+                HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"index-data.csv\""
+        )
+                .contentType(MediaType.parseMediaType("text/csv"))
+                .body(csv);
     }
 }
