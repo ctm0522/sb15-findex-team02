@@ -86,9 +86,9 @@ CREATE TABLE index_data
     versus DECIMAL(20, 6) NOT NULL,
     fluctuation_rate    DECIMAL(15, 6) NOT NULL,
 
-    trading_quantity    INT            NOT NULL,
-    trading_price       DECIMAL(25, 3) NOT NULL,
-    market_total_amount DECIMAL(27, 3),
+    trading_quantity    BIGINT            NOT NULL,
+    trading_price       BIGINT NOT NULL,
+    market_total_amount BIGINT NOT NULL ,
 
         CONSTRAINT uk_index_data
             UNIQUE (index_info_id, base_date),

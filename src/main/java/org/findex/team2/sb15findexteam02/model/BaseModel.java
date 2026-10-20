@@ -14,7 +14,7 @@ abstract public class BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false, updatable = false)
     @CreatedDate
