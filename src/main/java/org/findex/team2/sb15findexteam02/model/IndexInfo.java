@@ -1,7 +1,5 @@
 package org.findex.team2.sb15findexteam02.model;
 
-
-import com.fasterxml.jackson.core.sym.NameN;
 import jakarta.persistence.*;
 import lombok.Getter;
 
