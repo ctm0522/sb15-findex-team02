@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
+
 @AllArgsConstructor
 @NoArgsConstructor
 public class IndexDataCreateRequest {

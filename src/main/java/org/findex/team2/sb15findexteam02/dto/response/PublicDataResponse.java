@@ -5,8 +5,10 @@ import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class PublicDataResponse {
@@ -23,9 +25,9 @@ public class PublicDataResponse {
   @JsonProperty("fltRt")
   BigDecimal fluctuationRate;
   @JsonProperty("trqu")
-  BigDecimal tradingQuantity;
+  Long tradingQuantity;
   @JsonProperty("trPrc")
-  BigDecimal tradingPrice;
+  Long tradingPrice;
   @JsonProperty("lstgMrktTotAmt")
-  BigDecimal marketTotalAmount;
+  Long marketTotalAmount;
 }
