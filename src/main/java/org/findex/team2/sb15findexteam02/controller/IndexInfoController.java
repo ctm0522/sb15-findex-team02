@@ -1,6 +1,7 @@
 package org.findex.team2.sb15findexteam02.controller;
 
 import org.findex.team2.sb15findexteam02.dto.request.IndexInfoCreateRequest;
+import org.findex.team2.sb15findexteam02.dto.request.IndexInfoSearchRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexInfoUpdateRequest;
 import org.findex.team2.sb15findexteam02.dto.response.IndexInfoDto;
 import org.springframework.http.ResponseEntity;
@@ -14,26 +15,10 @@ public class IndexInfoController {
 
     @GetMapping
     public ResponseEntity<CursorPageResponseIndexInfoDto> findAll(
-            @RequestParam(required = false) String indexClassification,
-            @RequestParam(required = false) String indexName,
-            @RequestParam(required = false) Boolean favorite,
-            @RequestParam(required = false) Long idAfter,
-            @RequestParam(required = false) String cursor,
-            @RequestParam(required = false) String sortField,
-            @RequestParam(required = false) String sortDirection,
-            @RequestParam(required = false) Integer size
+            @ModelAttribute IndexInfoSearchRequest request
     ) {
         return ResponseEntity.ok(
-                indexInfoService.findAll(
-                        indexClassification
-                        indexName,
-                        favorite,
-                        idAfter,
-                        cursor,
-                        sortField,
-                        sortDirection,
-                        size
-                )
+                indexInfoService.findAll(request)
         );
     }
 
