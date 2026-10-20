@@ -30,7 +30,7 @@ public class BasicIndexDataService implements IndexDataService {
 
 
     @Override
-    public CursorPageResponseIndexDataDto findAll() {
+    public CursorPageResponseIndexDataDto findAll(IndexDataSearchRequest request) {
         return null;
     }
 
