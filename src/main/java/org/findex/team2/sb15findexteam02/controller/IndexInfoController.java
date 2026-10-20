@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/index-infos")
 public class IndexInfoController {
 
-    // 1. 지수 정보 목록 조회
     @GetMapping
     public ResponseEntity<CursorPageResponseIndexInfoDto> findAll(
             @RequestParam(required = false) String indexClassification,
@@ -25,8 +24,6 @@ public class IndexInfoController {
         return null;
     }
 
-
-    // 2. 지수 정보 등록
     @PostMapping
     public ResponseEntity<IndexInfoDto> create(
             @RequestBody IndexInfoCreateRequest request
@@ -34,8 +31,6 @@ public class IndexInfoController {
         return null;
     }
 
-
-    // 3. 지수 정보 단건 조회
     @GetMapping("/{id}")
     public ResponseEntity<IndexInfoDto> find(
             @PathVariable Long id
@@ -43,8 +38,6 @@ public class IndexInfoController {
         return null;
     }
 
-
-    // 4. 지수 정보 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id
@@ -52,8 +45,6 @@ public class IndexInfoController {
         return null;
     }
 
-
-    // 5. 지수 정보 수정
     @PatchMapping("/{id}")
     public ResponseEntity<IndexInfoDto> patch(
             @PathVariable Long id,
@@ -62,8 +53,6 @@ public class IndexInfoController {
         return null;
     }
 
-
-    // 6. 지수 정보 요약 목록 조회
     @GetMapping("/summaries")
     public ResponseEntity<List<SummaryDto>> summaries() {
         return null;
