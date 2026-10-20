@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/index-infos")
 public class IndexInfoController {
 
+    private final IndexInfoService indexInfoService;
+
     @GetMapping
     public ResponseEntity<CursorPageResponseIndexInfoDto> findAll(
             @RequestParam(required = false) String indexClassification,
@@ -21,28 +23,44 @@ public class IndexInfoController {
             @RequestParam(required = false) String sortDirection,
             @RequestParam(required = false) Integer size
     ) {
-        return null;
+        return ResponseEntity.ok(
+                indexInfoService.findAll(
+                        indexClassification
+                        indexName,
+                        favorite,
+                        idAfter,
+                        cursor,
+                        sortField,
+                        sortDirection,
+                        size
+                )
+        );
     }
 
     @PostMapping
     public ResponseEntity<IndexInfoDto> create(
             @RequestBody IndexInfoCreateRequest request
     ) {
-        return null;
+        return ResponseEntity.ok(
+                indexInfoService.create(request)
+        );
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<IndexInfoDto> find(
             @PathVariable Long id
     ) {
-        return null;
+        return ResponseEntity.ok(
+                indexInfoService.find(id)
+        );
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id
     ) {
-        return null;
+        indexInfoService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
@@ -50,11 +68,15 @@ public class IndexInfoController {
             @PathVariable Long id,
             @RequestBody IndexInfoUpdateRequest request
     ) {
-        return null;
+        return ResponseEntity.ok(
+                indexInfoService.update(id, request)
+        )
     }
 
     @GetMapping("/summaries")
     public ResponseEntity<List<SummaryDto>> summaries() {
-        return null;
+        return ResponseEntity.ok(
+                indexInfoService.summaries()
+        )
     }
 }
