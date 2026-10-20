@@ -11,7 +11,10 @@ import lombok.NoArgsConstructor;
 public class PublicDataRequest {
   String resultType;
   String serviceKey;
-  LocalDate beginBasDt;
-  LocalDate endBasDt;
+  // 지수 정보를 가져올 때 필요한 기준일자
+  LocalDate baseDate;
+  // 지수 데이터를 가져올 때 필요한 기준일자
+  LocalDate beginBaseDate;
+  LocalDate endBaseDate;
   String idxNm;
 }
