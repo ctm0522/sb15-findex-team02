@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class IndexDataClientDto {
+//  List<IndexTargetDto> targets;
   List<String> infoNames;
   List<String> categoryNames;
   LocalDate baseDateFrom;
