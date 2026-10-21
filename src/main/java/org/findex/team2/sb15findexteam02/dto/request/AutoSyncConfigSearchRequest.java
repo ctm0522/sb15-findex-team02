@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AutoSyncConfigSearchRequest {
-    Long IndexInfoId;
+    Long indexInfoId;
     Boolean enabled;
     Long idAfter;
     String cursor;
