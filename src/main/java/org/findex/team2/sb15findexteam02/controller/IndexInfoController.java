@@ -6,10 +6,13 @@ import org.findex.team2.sb15findexteam02.dto.request.IndexInfoSearchRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexInfoUpdateRequest;
 import org.findex.team2.sb15findexteam02.dto.response.CursorPageResponseIndexInfoDto;
 import org.findex.team2.sb15findexteam02.dto.response.IndexInfoDto;
+import org.findex.team2.sb15findexteam02.dto.response.IndexInfoSummaryDto;
 import org.findex.team2.sb15findexteam02.model.SourceType;
 import org.findex.team2.sb15findexteam02.service.IndexInfoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,7 +36,7 @@ public class IndexInfoController {
             @RequestParam SourceType sourceType
     ) {
         return ResponseEntity.ok(
-                indexInfoService.create(request, sourceType)
+                indexInfoService.create(request, SourceType.USER)
         );
     }
 
@@ -61,12 +64,12 @@ public class IndexInfoController {
             @RequestParam SourceType sourcType
     ) {
         return ResponseEntity.ok(
-                indexInfoService.update(id, request, sourcType)
+                indexInfoService.update(id, request, SourceType.USER)
         );
     }
 
     @GetMapping("/summaries")
-    public ResponseEntity<List<SummaryDto>> summaries() {
+    public ResponseEntity<List<IndexInfoSummaryDto>> summaries() {
         return ResponseEntity.ok(
                 indexInfoService.summaries()
         );
