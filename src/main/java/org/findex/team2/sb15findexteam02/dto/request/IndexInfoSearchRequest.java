@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class IndexInfoSearchRequest {
 
-    private String indexClassification;
-    private String indexName;
-    private Boolean favorite;
-    private Long idAfter;
-    private String cursor;
-    private String sortField;
-    private String sortDirection;
-    private Integer size;
+    String indexClassification;
+    String indexName;
+    Boolean favorite;
+    Long idAfter;
+    String cursor;
+    String sortField;
+    String sortDirection;
+    Integer size;
 }
