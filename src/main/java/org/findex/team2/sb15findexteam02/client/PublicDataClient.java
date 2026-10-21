@@ -25,7 +25,7 @@ public class PublicDataClient {
   private static final String RESULT_TYPE = "json";
   private static final int DEFAULT_PAGE_NO = 1;
 //  private static final int INFO_NUM_OF_ROWS = 500;
-  private static final int DATA_NUM_OF_ROWS = 1000;
+ // private static final int DATA_NUM_OF_ROWS = 1000;
 
   // 지수 정보 가져오기
   public List<SyncJobDto> fetchIndexInfo(String worker) {
