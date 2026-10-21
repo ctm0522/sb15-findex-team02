@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class IndexDataClientDto {
   List<String> infoNames;
   List<String> categoryNames;
-  List<Long> indexInfoIds;
   LocalDate baseDateFrom;
   LocalDate baseDateTo;
 }
