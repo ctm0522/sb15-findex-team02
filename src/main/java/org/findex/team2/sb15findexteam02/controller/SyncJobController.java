@@ -1,5 +1,6 @@
 package org.findex.team2.sb15findexteam02.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataSyncRequest;
 import org.findex.team2.sb15findexteam02.dto.request.SyncjobSearchRequest;
@@ -25,9 +26,13 @@ public class SyncJobController {
 
     @PostMapping("/index-data")
     public ResponseEntity<List<SyncJobDto>>syncIndexData(
-            @RequestBody IndexDataSyncRequest request
+            @RequestBody IndexDataSyncRequest request,
+            HttpServletRequest httpServletRequest
     ){
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(syncJobService.syncInxdexData(request));
+        String worker = httpServletRequest.getRemoteAddr();
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(syncJobService.syncInxdexData(request, worker));
     }
 
     @GetMapping
