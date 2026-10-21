@@ -2,6 +2,7 @@ package org.findex.team2.sb15findexteam02.service.basic;
 
 import lombok.RequiredArgsConstructor;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataCreateRequest;
+import org.findex.team2.sb15findexteam02.dto.request.IndexDataSearchRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataUpdateRequest;
 import org.findex.team2.sb15findexteam02.dto.response.CursorPageResponseIndexDataDto;
 import org.findex.team2.sb15findexteam02.dto.response.IndexChartDto;

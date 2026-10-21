@@ -43,4 +43,19 @@ public class SyncJob extends BaseModel{
     )
     private List<IndexInfo> infos = new ArrayList<>();
 
+    protected SyncJob(){}
+
+    public SyncJob(ResultType status, String worker, JobType jobType, LocalDate startDate,
+                   LocalDate endDate, Integer totalCount, List<IndexInfo> infos){
+        this.jobTime=LocalDateTime.now();
+        this.status=status;
+        this.worker=worker;
+        this.jobType=jobType;
+        this.startDate=startDate;
+        this.endDate=endDate;
+        this.totalCount=totalCount;
+        this.infos=infos;
+
+    }
+
 }

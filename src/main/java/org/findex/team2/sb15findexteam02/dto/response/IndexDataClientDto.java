@@ -14,4 +14,5 @@ public class IndexDataClientDto {
   List<String> categoryNames;
   LocalDate baseDateFrom;
   LocalDate baseDateTo;
+  String worker;
 }
