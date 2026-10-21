@@ -8,6 +8,8 @@ import org.findex.team2.sb15findexteam02.model.AutoSyncConfig;
 import org.findex.team2.sb15findexteam02.repository.AutoSyncConfigRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 @RequiredArgsConstructor
 public class AutoSyncConfigService {
@@ -24,11 +26,11 @@ public class AutoSyncConfigService {
         );
 
         if (updated == 0) {
-            throw new IllegalArgumentException( "자동 연동 설정을 찾을 수 없습니다. id = " + id);
+            throw new NoSuchElementException( "자동 연동 설정을 찾을 수 없습니다. id = " + id);
         }
 
         AutoSyncConfig config = autoSyncConfigRepository.findById(id).orElseThrow(() ->
-            new IllegalArgumentException("자동 연동 설정을 찾을 수 없습니다. id = " + id)
+            new NoSuchElementException("자동 연동 설정을 찾을 수 없습니다. id = " + id)
         );
 
         return new AutoSyncConfigDto(

@@ -14,7 +14,7 @@ public class PublicDataRequest {
   // 지수 정보를 가져올 때 필요한 기준일자
   LocalDate baseDate;
   // 지수 데이터를 가져올 때 필요한 기준일자
-  LocalDate beginBaseDate;
-  LocalDate endBaseDate;
-  String idxNm;
+  LocalDate beginBaseDate;//중복
+  LocalDate endBaseDate;//중복
+  String idxNm;//중복
 }
