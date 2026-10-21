@@ -1,5 +1,6 @@
 package org.findex.team2.sb15findexteam02.controller;
 
+import lombok.AllArgsConstructor;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataCreateRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataSearchRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataUpdateRequest;
@@ -8,6 +9,8 @@ import org.findex.team2.sb15findexteam02.dto.response.IndexChartDto;
 import org.findex.team2.sb15findexteam02.dto.response.IndexDataDto;
 import org.findex.team2.sb15findexteam02.dto.response.RankedIndexPerformanceDto;
 import org.findex.team2.sb15findexteam02.model.PeriodType;
+import org.findex.team2.sb15findexteam02.model.SourceType;
+import org.findex.team2.sb15findexteam02.service.IndexDataService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +21,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/index-data")
 public class IndexDataController {
 
@@ -32,10 +36,11 @@ public class IndexDataController {
 
     @PostMapping
     public ResponseEntity<IndexDataDto> create(
-            @RequestBody IndexDataCreateRequest request
+            @RequestBody IndexDataCreateRequest request,
+            @RequestParam SourceType sourceType
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(indexDataService.create(request));
+                .body(indexDataService.create(request, sourceType));
     }
 
     @DeleteMapping("/{id}")
@@ -49,15 +54,16 @@ public class IndexDataController {
     @PatchMapping("/{id}")
     public ResponseEntity<IndexDataDto> patch(
             @PathVariable Long id,
-            @ResponseBody IndexDataUpdateRequest request
+            @ResponseBody IndexDataUpdateRequest request,
+            @RequestParam SourceType sourceType
     ) {
-        return ResponseEntity.ok(indexDataService.update(id, request));
+        return ResponseEntity.ok(indexDataService.update(id, request, sourceType));
     }
 
     @GetMapping("/{id}/chart")
     public ResponseEntity<IndexChartDto> Chart(
             @PathVariable Long id,
-            @RequestParam(defaultValue = "DAILY") String periodType
+            @RequestParam(defaultValue = "DAILY") PeriodType periodType
     ) {
         return ResponseEntity.ok(indexDataService.Chart(id, periodType));
     }
