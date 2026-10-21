@@ -175,6 +175,7 @@ public class BasicIndexInfoService implements IndexInfoService {
         }
         else {
             category = new IndexCategory(request.getIndexClassification());
+            indexCategoryRepository.save(category);
         }
 
         IndexInfo indexInfo = new IndexInfo(category,request.getIndexName(),request.getEmployedItemsCount(),
