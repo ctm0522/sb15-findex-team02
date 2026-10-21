@@ -2,6 +2,7 @@ package org.findex.team2.sb15findexteam02.service.basic;
 
 import lombok.RequiredArgsConstructor;
 import org.findex.team2.sb15findexteam02.client.PublicDataClient;
+import org.findex.team2.sb15findexteam02.dto.request.IndexDataCreateRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataSyncRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexInfoCreateRequest;
 import org.findex.team2.sb15findexteam02.dto.request.SyncJobCreateRequest;
@@ -15,6 +16,7 @@ import org.findex.team2.sb15findexteam02.service.IndexDataService;
 import org.findex.team2.sb15findexteam02.service.IndexInfoService;
 import org.findex.team2.sb15findexteam02.service.SyncJobService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,7 @@ public class BasicSyncJobService implements SyncJobService {
     private final PublicDataClient publicDataClient;
 
     @Override
+    @Transactional
     public SyncJobDto create(SyncJobCreateRequest request, String result) {
         SyncJob syncJob = new SyncJob(request.getStatus(), request.getWorker(), request.getJobType(),
                 request.getTargetDate(),  request.getIndexInfo());
@@ -46,6 +49,7 @@ public class BasicSyncJobService implements SyncJobService {
     }
 
     @Override
+    @Transactional
     public List<SyncJobDto> convertToIndexDataClientDtoDto(IndexDataSyncRequest request, String worker) {
         List<Long> ids = request.getIndexInfoIds();
         List<String> infoNames = new ArrayList<>();
@@ -64,6 +68,7 @@ public class BasicSyncJobService implements SyncJobService {
     }
 
     @Override
+    @Transactional
     public List<SyncJobDto> syncInfo(List<PublicDataInfoResponse> requests, String worker, ResultType status) {
         String result;
         IndexInfo indexInfo;
@@ -77,8 +82,9 @@ public class BasicSyncJobService implements SyncJobService {
             } else {
                 IndexInfoCreateRequest indexInfoCreateRequest = new IndexInfoCreateRequest(entry.getIndexClassification(),entry.getIndexName(),
                         entry.getEmployedItemCount(),entry.getBasDate(),entry.getBaseIndex(),false);
-                indexInfoService.create(indexInfoCreateRequest, SourceType.OPEN_API);
-                indexInfo = indexInfoRepository.findByIndexNameAndIndexCategoryCategoryName(entry.getIndexName(),entry.getIndexClassification()).get();
+                IndexInfoDto indexInfoDto = indexInfoService.create(indexInfoCreateRequest, SourceType.OPEN_API);
+                indexInfo = indexInfoRepository.findById(indexInfoDto.getId()).
+                        orElseThrow(() -> new NoSuchElementException("지수 찾을 수 없음 : " + indexInfoDto.getId()));
                 result = "NEW";
             }
             SyncJobCreateRequest syncJobCreateRequest = new SyncJobCreateRequest(status,worker, JobType.INDEX_INFO, null, indexInfo);
@@ -91,11 +97,48 @@ public class BasicSyncJobService implements SyncJobService {
         //없으면 create 있으면 update 호출
         //싱크잡크리에이트 호출
 
-        return null;
+        return dtos;
     }
 
     @Override
+    @Transactional
     public List<SyncJobDto> syncData(List<PublicDataResponse> requests, String worker, ResultType status) {
-        return null;
+        String result;
+        IndexInfo indexInfo;
+        IndexData indexData;
+        SyncJobDto syncJobDto;
+        List<SyncJobDto> dtos = new ArrayList<>();
+
+
+        for(PublicDataResponse entry : requests){
+            indexInfo = indexInfoRepository.findByIndexNameAndIndexCategoryCategoryName(entry.getInfoNames(),entry.getCategoryNames()).orElseThrow(
+                    () -> new NoSuchElementException("지수정보 없음" + entry.getInfoNames() + ", " + entry.getCategoryNames()));
+
+            if(indexDataRepository.existsByBaseDateAndIndexInfoId(entry.getBaseDate(),indexInfo.getId())){
+                indexData = indexDataRepository.findByBaseDateAndIndexInfoId(entry.getBaseDate(),indexInfo.getId());
+                indexData.update(entry.getMarketPrice(),entry.getDailyPrice(),entry.getHighPrice(),entry.getLowPrice(),
+                        entry.getVs(),entry.getFluctuationRate(),entry.getTradingQuantity(),entry.getTradingPrice(),entry.getMarketTotalAmount(),SourceType.OPEN_API);
+
+                result = "UPDATE";
+
+            }
+            else {
+                IndexDataCreateRequest indexDataCreateRequest = new IndexDataCreateRequest(indexInfo.getId(),entry.getBaseDate(),entry.getMarketPrice(),
+                        entry.getDailyPrice(),entry.getHighPrice(),entry.getLowPrice(),entry.getVs(),entry.getFluctuationRate(),
+                        entry.getTradingQuantity(),entry.getTradingPrice(),entry.getMarketTotalAmount());
+
+                indexDataService.create(indexDataCreateRequest, SourceType.OPEN_API);
+                result = "NEW";
+            }
+
+            SyncJobCreateRequest syncJobCreateRequest = new SyncJobCreateRequest(status,worker, JobType.INDEX_DATA, entry.getBaseDate(), indexInfo);
+            syncJobDto = create(syncJobCreateRequest,result);
+            dtos.add(syncJobDto);
+
+        }
+
+
+
+        return dtos;
     }
 }
