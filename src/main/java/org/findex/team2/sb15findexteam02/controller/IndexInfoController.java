@@ -1,15 +1,18 @@
 package org.findex.team2.sb15findexteam02.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.findex.team2.sb15findexteam02.dto.request.IndexInfoCreateRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexInfoSearchRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexInfoUpdateRequest;
 import org.findex.team2.sb15findexteam02.dto.response.CursorPageResponseIndexInfoDto;
 import org.findex.team2.sb15findexteam02.dto.response.IndexInfoDto;
+import org.findex.team2.sb15findexteam02.model.SourceType;
 import org.findex.team2.sb15findexteam02.service.IndexInfoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/index-infos")
 public class IndexInfoController {
 
@@ -26,10 +29,11 @@ public class IndexInfoController {
 
     @PostMapping
     public ResponseEntity<IndexInfoDto> create(
-            @RequestBody IndexInfoCreateRequest request
+            @RequestBody IndexInfoCreateRequest request,
+            @RequestParam SourceType sourceType
     ) {
         return ResponseEntity.ok(
-                indexInfoService.create(request)
+                indexInfoService.create(request, sourceType)
         );
     }
 
@@ -53,17 +57,18 @@ public class IndexInfoController {
     @PatchMapping("/{id}")
     public ResponseEntity<IndexInfoDto> patch(
             @PathVariable Long id,
-            @RequestBody IndexInfoUpdateRequest request
+            @RequestBody IndexInfoUpdateRequest request,
+            @RequestParam SourceType sourcType
     ) {
         return ResponseEntity.ok(
-                indexInfoService.update(id, request)
-        )
+                indexInfoService.update(id, request, sourcType)
+        );
     }
 
     @GetMapping("/summaries")
     public ResponseEntity<List<SummaryDto>> summaries() {
         return ResponseEntity.ok(
                 indexInfoService.summaries()
-        )
+        );
     }
 }
