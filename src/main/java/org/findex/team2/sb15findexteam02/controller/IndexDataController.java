@@ -7,6 +7,7 @@ import org.findex.team2.sb15findexteam02.dto.response.CursorPageResponseIndexDat
 import org.findex.team2.sb15findexteam02.dto.response.IndexChartDto;
 import org.findex.team2.sb15findexteam02.dto.response.IndexDataDto;
 import org.findex.team2.sb15findexteam02.dto.response.RankedIndexPerformanceDto;
+import org.findex.team2.sb15findexteam02.model.PeriodType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
