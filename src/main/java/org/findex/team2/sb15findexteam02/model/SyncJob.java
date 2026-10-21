@@ -43,4 +43,15 @@ public class SyncJob extends BaseModel{
     )
     private List<IndexInfo> infos = new ArrayList<>();
 
+    protected SyncJob(){}
+
+    public SyncJob(ResultType status,
+    String worker,
+    JobType jobType,
+    LocalDate startDate,
+    LocalDate endDate,
+    Integer totalCount){
+
+    }
+
 }
