@@ -27,6 +27,4 @@ public class PublicDataInfoResponse {
   // 기준 지수
   @JsonProperty("basIdx")
   BigDecimal baseIndex;
-
-
 }

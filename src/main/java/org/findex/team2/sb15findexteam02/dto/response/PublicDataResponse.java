@@ -14,10 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PublicDataResponse {
-  /*@JsonProperty("beginBasDt")
-  LocalDate baseDateFrom;
-  @JsonProperty("endBasDt")
-  LocalDate baseDateTo;*/
+  @JsonProperty("basDt")
   LocalDate baseDate;
   @JsonProperty("idxNm")
   List<String> infoNames;
