@@ -27,34 +27,23 @@ public class SyncJob extends BaseModel{
     private JobType jobType;
 
     @Column
-    private LocalDate startDate;
+    private LocalDate targetDate;
 
-    @Column
-    private LocalDate endDate;
 
-    @Column
-    private Integer totalCount;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "sync_job_index_infos",
-            joinColumns = @JoinColumn(name = "sync_jobs_id"),
-            inverseJoinColumns = @JoinColumn(name = "index_info_id")
-    )
-    private List<IndexInfo> infos = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "index_info_id",nullable = false)
+    private IndexInfo indexInfo;
 
     protected SyncJob(){}
 
-    public SyncJob(ResultType status, String worker, JobType jobType, LocalDate startDate,
-                   LocalDate endDate, Integer totalCount, List<IndexInfo> infos){
+    public SyncJob(ResultType status, String worker, JobType jobType, LocalDate targetDate,
+                   IndexInfo IndexInfo){
         this.jobTime=LocalDateTime.now();
         this.status=status;
         this.worker=worker;
         this.jobType=jobType;
-        this.startDate=startDate;
-        this.endDate=endDate;
-        this.totalCount=totalCount;
-        this.infos=infos;
+        this.targetDate=targetDate;
+        this.indexInfo=IndexInfo;
 
     }
 
