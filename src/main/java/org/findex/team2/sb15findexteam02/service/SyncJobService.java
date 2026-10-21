@@ -12,13 +12,13 @@ import java.util.List;
 
 @Service
 public interface SyncJobService {
-    SyncJobDto create(SyncJobCreateRequest request);
+    SyncJobDto create(SyncJobCreateRequest request, String result);
     CursorPageResponseSyncJobDto findAll();
 
-    IndexDataClientDto convertToIndexDataClientDtoDto(IndexDataSyncRequest request);
+    IndexDataClientDto convertToIndexDataClientDtoDto(IndexDataSyncRequest request, String worker);
 
-    SyncJobDto syncInfo(List<PublicDataInfoResponse> requests, String worker, ResultType status);
+    List<SyncJobDto> syncInfo(List<PublicDataInfoResponse> requests, String worker, ResultType status);
 
-    SyncJobDto syncData(List<PublicDataResponse> requests, String worker, ResultType status);
+    List<SyncJobDto> syncData(List<PublicDataResponse> requests, String worker, ResultType status);
 
 }

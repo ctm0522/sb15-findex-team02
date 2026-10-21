@@ -20,17 +20,17 @@ GRANT USAGE, SELECT
 -------------------------------------------
 
 create table index_categories (
-    id serial primary key ,
+    id bigserial primary key ,
     created_at timestamp NOT NULL ,
     updated_at timestamp,
     category_name varchar(20) NOT NULL unique
 );
 
 create table index_infos(
-    id serial PRIMARY KEY ,
+    id bigserial PRIMARY KEY ,
     created_at timestamp NOT NULL ,
     updated_at timestamp,
-    index_category_id int references  index_categories(id) NOT NULL ,
+    index_category_id bigint references  index_categories(id) NOT NULL ,
     index_name varchar(20) NOT NULL ,
     employed_items_count int NOT NULL ,
     base_point_time DATE NOT NULL ,
@@ -41,38 +41,35 @@ create table index_infos(
 );
 
 create table sync_jobs(
-    id serial PRIMARY KEY,
+    id bigserial PRIMARY KEY,
     created_at timestamp NOT NULL,
     job_time timestamp NOT NULL,
     status varchar(10) check ( status in ('SUCCESS', 'FAILED') ) NOT NULL,
     worker varchar(50) NOT NULL,
     job_type varchar(15) check (job_type in ('INDEX_INFO', 'INDEX_DATA')) NOT NULL,
-    start_date date,
-    end_date date,
-    total_count int
+    target_date date,
+    index_info_id bigint NOT NULL references index_infos(id)
+
 );
 
 create table auto_sync_config(
-    id serial PRIMARY KEY,
+    id bigserial PRIMARY KEY,
     created_at timestamp NOT NULL,
     updated_at timestamp,
-    index_info_id int references index_infos(id) on delete cascade NOT NULL,
+    index_info_id bigint references index_infos(id) on delete cascade NOT NULL unique ,
     enabled boolean NOT NULL,
-    schedule varchar(10) NOT NULL,
-    last_synced_at timestamp,
-
-    CONSTRAINT uk_auto_sync_config_index_schedule UNIQUE (index_info_id, schedule)
+    last_synced_at timestamp
 );
 
 --------------------------------------------
 
 CREATE TABLE index_data
 (
-    id                  SERIAL PRIMARY KEY,
+    id                  bigserial PRIMARY KEY,
     created_at          TIMESTAMP      NOT NULL,
     updated_at          TIMESTAMP,
 
-    index_info_id       INT            NOT NULL,
+    index_info_id       bigINT            NOT NULL,
 
     base_date           DATE           NOT NULL,
     source_type VARCHAR(10) NOT NULL
@@ -98,9 +95,10 @@ CREATE TABLE index_data
             REFERENCES index_infos (id) on delete cascade
 );
 
-
+/*
 CREATE TABLE sync_job_index_infos (
     sync_jobs_id int references sync_jobs(id) on delete cascade NOT NULL ,
     index_info_id int references index_infos(id) on delete cascade NOt NULL ,
     primary key (sync_jobs_id,index_info_id)
 )
+ */
