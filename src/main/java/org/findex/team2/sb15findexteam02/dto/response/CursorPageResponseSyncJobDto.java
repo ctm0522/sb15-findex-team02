@@ -16,4 +16,7 @@ public class CursorPageResponseSyncJobDto {
     Integer size;
     Long totalElements;
     Boolean hasNext;
+
+
+
 }

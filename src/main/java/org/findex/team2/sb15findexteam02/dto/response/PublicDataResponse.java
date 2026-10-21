@@ -17,9 +17,9 @@ public class PublicDataResponse {
   @JsonProperty("basDt")
   LocalDate baseDate;
   @JsonProperty("idxNm")
-  List<String> infoNames;
+  String infoNames;
   @JsonProperty("idxCsf")
-  List<String> categoryNames;
+  String categoryNames;
   @JsonProperty("mkp")
   BigDecimal marketPrice;
   @JsonProperty("dpr")
