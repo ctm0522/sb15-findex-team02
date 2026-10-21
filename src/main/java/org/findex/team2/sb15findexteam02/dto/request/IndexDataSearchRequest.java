@@ -14,9 +14,6 @@ public class IndexDataSearchRequest {
     Long indexInfoId;
     LocalDate startDate;
     LocalDate endDate;
-    Long idAfter;
-    String cursor;
     String sortField;
     String sortDirection;
-    Integer size;
 }

@@ -2,10 +2,12 @@ package org.findex.team2.sb15findexteam02.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.findex.team2.sb15findexteam02.client.PublicDataClient;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataSyncRequest;
 import org.findex.team2.sb15findexteam02.dto.request.SyncjobSearchRequest;
 import org.findex.team2.sb15findexteam02.dto.response.CursorPageResponseSyncJobDto;
 import org.findex.team2.sb15findexteam02.dto.response.SyncJobDto;
+import org.findex.team2.sb15findexteam02.service.SyncJobService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +20,12 @@ import java.util.List;
 public class SyncJobController {
 
     private final SyncJobService syncJobService;
+    private final PublicDataClient publicDataClient;
 
     @PostMapping("/index-infos")
     public ResponseEntity<List<SyncJobDto>> syncIndexInfos() {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(syncJobService.syncIndexInfos());
+        //워커관련
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(publicDataClient.fetchIndexInfo(String worker));
     }
 
     @PostMapping("/index-data")
@@ -32,7 +36,7 @@ public class SyncJobController {
         String worker = httpServletRequest.getRemoteAddr();
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(syncJobService.syncInxdexData(request, worker));
+                .body(syncJobService.convertToIndexDataClientDtoDto(request, worker));
     }
 
     @GetMapping

@@ -5,6 +5,7 @@ import org.findex.team2.sb15findexteam02.dto.request.AutoSyncConfigSearchRequest
 import org.findex.team2.sb15findexteam02.dto.request.AutoSyncConfigUpdateRequest;
 import org.findex.team2.sb15findexteam02.dto.response.AutoSyncConfigDto;
 import org.findex.team2.sb15findexteam02.dto.response.CursorPageResponseAutoSyncConfigDto;
+import org.findex.team2.sb15findexteam02.service.basic.AutoSyncConfigService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

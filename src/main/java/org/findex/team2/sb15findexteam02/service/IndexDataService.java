@@ -18,8 +18,8 @@ public interface IndexDataService {
     IndexDataDto update(Long id, IndexDataUpdateRequest request, SourceType sourceType);
     IndexChartDto Chart(Long id, PeriodType periodType);
     List<RankedIndexPerformanceDto> rank(Long id, PeriodType periodType, int limit);
-    List<RankedIndexPerformanceDto> favorite(PeriodType periodType);
-    ResponseEntity<?> toCSV();
+    List<IndexPerformanceDto> favorite(PeriodType periodType);
+    ResponseEntity<?> toCSV(IndexDataSearchRequest request);
 
 
 }

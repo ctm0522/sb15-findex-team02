@@ -1,6 +1,7 @@
 package org.findex.team2.sb15findexteam02.service.basic;
 
 import lombok.RequiredArgsConstructor;
+import org.findex.team2.sb15findexteam02.client.PublicDataClient;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataSyncRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexInfoCreateRequest;
 import org.findex.team2.sb15findexteam02.dto.request.SyncJobCreateRequest;
@@ -29,6 +30,7 @@ public class BasicSyncJobService implements SyncJobService {
 
     private final IndexDataService indexDataService;
     private final IndexInfoService indexInfoService;
+    private final PublicDataClient publicDataClient;
 
     @Override
     public SyncJobDto create(SyncJobCreateRequest request, String result) {
@@ -44,7 +46,7 @@ public class BasicSyncJobService implements SyncJobService {
     }
 
     @Override
-    public IndexDataClientDto convertToIndexDataClientDtoDto(IndexDataSyncRequest request, String worker) {
+    public List<SyncJobDto> convertToIndexDataClientDtoDto(IndexDataSyncRequest request, String worker) {
         List<Long> ids = request.getIndexInfoIds();
         List<String> infoNames = new ArrayList<>();
         List<String> categoryNames = new ArrayList<>();
@@ -56,7 +58,9 @@ public class BasicSyncJobService implements SyncJobService {
             categoryNames.add(indexInfo.getIndexCategory().getCategoryName());
         });
 
-        return new IndexDataClientDto(infoNames,categoryNames,request.getBaseDateFrom(),request.getBaseDateTo(),worker);
+         IndexDataClientDto indexDataClientDto = new IndexDataClientDto(infoNames,categoryNames,request.getBaseDateFrom(),request.getBaseDateTo(),worker);
+         publicDataClient.fetchIndexData(indexDataClientDto);
+         return null;
     }
 
     @Override

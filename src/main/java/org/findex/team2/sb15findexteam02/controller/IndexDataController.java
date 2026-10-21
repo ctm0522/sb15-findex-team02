@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataCreateRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataSearchRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataUpdateRequest;
-import org.findex.team2.sb15findexteam02.dto.response.CursorPageResponseIndexDataDto;
-import org.findex.team2.sb15findexteam02.dto.response.IndexChartDto;
-import org.findex.team2.sb15findexteam02.dto.response.IndexDataDto;
-import org.findex.team2.sb15findexteam02.dto.response.RankedIndexPerformanceDto;
+import org.findex.team2.sb15findexteam02.dto.response.*;
 import org.findex.team2.sb15findexteam02.model.PeriodType;
 import org.findex.team2.sb15findexteam02.model.SourceType;
 import org.findex.team2.sb15findexteam02.service.IndexDataService;
@@ -40,11 +37,11 @@ public class IndexDataController {
             @RequestParam SourceType sourceType
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(indexDataService.create(request, sourceType));
+                .body(indexDataService.create(request, SourceType.USER));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<void> delete(
+    public ResponseEntity<Void> delete(
             @PathVariable Long id
     ) {
         indexDataService.delete(id);
@@ -57,7 +54,7 @@ public class IndexDataController {
             @RequestBody IndexDataUpdateRequest request,
             @RequestParam SourceType sourceType
     ) {
-        return ResponseEntity.ok(indexDataService.update(id, request, sourceType));
+        return ResponseEntity.ok(indexDataService.update(id, request, SourceType.USER));
     }
 
     @GetMapping("/{id}/chart")
@@ -80,7 +77,7 @@ public class IndexDataController {
     }
 
     @GetMapping("/performance/favorite")
-    public ResponseEntity<List<RankedIndexPerformanceDto>> favorite(
+    public ResponseEntity<List<IndexPerformanceDto>> favorite(
             @RequestParam(defaultValue = "DAILY") PeriodType periodType
     ) {
         return ResponseEntity.ok(
@@ -89,7 +86,7 @@ public class IndexDataController {
     }
 
     @GetMapping("/export/csv")
-    public ResponseEntity<byte[]> toCSV(
+    public ResponseEntity<?> toCSV(
             @ModelAttribute IndexDataSearchRequest request
     ) {
         byte[] csv = indexDataService.toCSV(request);

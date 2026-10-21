@@ -4,20 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.findex.team2.sb15findexteam02.dto.request.PublicDataRequest;
-import org.findex.team2.sb15findexteam02.dto.response.IndexDataClientDto;
-import org.findex.team2.sb15findexteam02.dto.response.IndexTargetDto;
-import org.findex.team2.sb15findexteam02.dto.response.PublicDataInfoResponse;
-import org.findex.team2.sb15findexteam02.dto.response.PublicDataResponse;
+import org.findex.team2.sb15findexteam02.dto.response.*;
+import org.findex.team2.sb15findexteam02.model.ResultType;
+import org.findex.team2.sb15findexteam02.service.SyncJobService;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 @Component
 @RequiredArgsConstructor
 public class PublicDataClient {
   private final RestClient restClient;
+  private final SyncJobService syncJobService;
 
   // 지수 정보 가져오기
-  public List<PublicDataInfoResponse> fetchIndexInfo(IndexDataClientDto dto, PublicDataRequest request) {
+  public List<SyncJobDto> fetchIndexInfo(String worker) {
 
     List<PublicDataInfoResponse> responses = new ArrayList<>();
 
@@ -42,12 +43,14 @@ public class PublicDataClient {
           .body(PublicDataInfoResponse.class);
       responses.add(singleResponse);
     }
+
+    syncJobService.syncInfo( responses, worker, ResultType status);
     return responses;
   }
 
   // 지수 데이터 가져오기
   // indexDataSync는 프론트엔드에서 오는 요청
-  public List<PublicDataResponse> fetchIndexData(IndexDataClientDto dto, PublicDataRequest request) {
+  public List<SyncJobDto> fetchIndexData(IndexDataClientDto dto) {
     List<String> indexNames = dto.getInfoNames();
 
     List<PublicDataResponse> responses = new ArrayList<>();
@@ -66,6 +69,7 @@ public class PublicDataClient {
           .body(PublicDataResponse.class);
       responses.add(singleResponse);
     }
+    syncJobService.syncData(responses,dto.getWorker(),ResultType status);
     return responses;
   }
 
