@@ -1,6 +1,5 @@
 # 2조
-(협업 문서)
-
+[노션 페이지](https://app.notion.com/p/ee89c8524dc58272aad1010f305f3a4b?source=copy_link)
 ## 팀원 구성
 최태민: ctm0522
 
@@ -18,13 +17,11 @@
 - 공통 Tool: Git & Github, Discord
 
 ## 팀원별 구현 기능 상세
-최태민:
+최태민: 외부 API 통신 Client 구현, 외부 API에 필요한 DTO 설계, 자동 연동 설정 공동 구현
 
-김민규:
+김민규: 각 도메인 별 Service, Repository 구현
 
-김한민:
-
-진하윤:
+김한민: 각 도메인별 Controller 구현, 자동 연동 설정 공동 구현
 
 ## 파일 구조
 ```
