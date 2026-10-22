@@ -1,12 +1,6 @@
 # 2조
 [노션 페이지](https://app.notion.com/p/ee89c8524dc58272aad1010f305f3a4b?source=copy_link)
 ## 팀원 구성
-최태민: ctm0522
-
-김민규: kmg-git
-
-김한민: Miiiin06
-
 | 이름 | GitHub |
 |:---:|:---|
 | (최태민) | [Taemin02](https://github.com/ctm0522) |
@@ -35,14 +29,14 @@ src
  ┗ main
    ┗ java
      ┗ org.findex.team2.sb15findexteam02
-       ┣ controller
-       ┣ dto
-       ┃ ┣ request
-       ┃ ┗ response
-       ┣ exception
-       ┣ model
-       ┣ repository
-       ┣ service
+       ┣ controller # 컨트롤러
+       ┣ dto        # DTO
+       ┃ ┣ request  # 요청 DTO
+       ┃ ┗ response # 응답 DTO
+       ┣ exception  # 예외처리
+       ┣ model      # 엔티티
+       ┣ repository # 레포지토리
+       ┣ service    # 서비스
        ┗ Sb15FindexTeam02Application.java
 ```
 처음 시작하는 소규모 프로젝트 이므로, 각자의 실력과 현 상황을 고려하여 레이어 기반 설계 적용
