@@ -37,8 +37,7 @@ public class PublicDataClient {
     String endBasDt = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     String beginBasDt = LocalDate.now().minusDays(7).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
-    ResultType status;
-
+    ResultType status = ResultType.FAILED; // 기본값
     try{
       PublicDataInfoResponse singleResponse = restClient.get()
           .uri(uriBuilder -> uriBuilder
@@ -54,13 +53,11 @@ public class PublicDataClient {
       if (singleResponse != null) {
         responses.add(singleResponse);
         status = ResultType.SUCCESS;
-      } else {
-        status = ResultType.FAILED; // 응답이 비어있을 때 실패 처리 (본인 Enum 값에 맞게 수정)
       }
+
       responses.add(singleResponse);
     } catch (Exception e) {
       log.error("지수 정보 연동 실패", e);
-      status = ResultType.FAILED;
     }
 
     return syncJobService.syncInfo(responses, worker, status);
