@@ -19,21 +19,14 @@ import org.findex.team2.sb15findexteam02.repository.IndexDataRepository;
 import org.findex.team2.sb15findexteam02.repository.IndexInfoRepository;
 import org.findex.team2.sb15findexteam02.service.IndexDataService;
 import org.findex.team2.sb15findexteam02.specification.IndexDataSpecification;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -115,6 +108,27 @@ public class BasicIndexDataService implements IndexDataService {
             throw new IllegalArgumentException(
                     "시작 날짜는 종료 날짜보다 늦을 수 없습니다."
             );
+        }
+
+        String cursor = request.getCursor();
+        Long idAfter = request.getIdAfter();
+        if ((cursor == null) != (idAfter == null)) {
+            throw new IllegalArgumentException("cursor와 idAfter는 함께 전달해야 합니다.");
+        }
+        if (cursor != null) {
+            if (cursor.isBlank()) {
+                throw new IllegalArgumentException("cursor는 빈 문자열일 수 없습니다.");
+            }
+            try {
+                switch (sortField) {
+                    case "baseDate" -> LocalDate.parse(cursor);
+                    case "tradingQuantity", "tradingPrice", "marketTotalAmount" -> Long.parseLong(cursor);
+                    default -> new BigDecimal(cursor);
+                }
+            } catch (NumberFormatException | java.time.format.DateTimeParseException exception) {
+                throw new IllegalArgumentException(
+                        sortField + " 정렬에 맞지 않는 cursor 형식입니다.", exception);
+            }
         }
 
         // 3. 검색 조건 생성
@@ -277,7 +291,7 @@ public class BasicIndexDataService implements IndexDataService {
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<?> toCSV(IndexDataSearchRequest request) {
+    public byte[] toCSV(IndexDataSearchRequest request) {
 
         String field = request.getSortField() == null
                 ? "baseDate"
@@ -355,25 +369,7 @@ public class BasicIndexDataService implements IndexDataService {
         }
 
         // CSV 문자열을 바이트 배열로 변환
-        byte[] bytes = csv.toString().getBytes(StandardCharsets.UTF_8);
-
-        // 다운로드 리소스 생성
-        InputStream inputStream = new ByteArrayInputStream(bytes);
-        InputStreamResource resource = new InputStreamResource(inputStream);
-
-        return ResponseEntity.ok()
-                .contentType(
-                        new MediaType("text", "csv", StandardCharsets.UTF_8)
-                )
-                .contentLength(bytes.length)
-                .header(
-                        HttpHeaders.CONTENT_DISPOSITION,
-                        ContentDisposition.attachment()
-                                .filename("index-data.csv", StandardCharsets.UTF_8)
-                                .build()
-                                .toString()
-                )
-                .body(resource);
+        return csv.toString().getBytes(StandardCharsets.UTF_8);
     }
 
     private List<IndexData> sample(List<IndexData> history, PeriodType period) {

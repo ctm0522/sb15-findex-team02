@@ -31,7 +31,7 @@ public class BasicSyncJobService implements SyncJobService {
 
     private final IndexDataService indexDataService;
     private final IndexInfoService indexInfoService;
-    private final PublicDataClient publicDataClient;
+    private final org.springframework.beans.factory.ObjectProvider<PublicDataClient> publicDataClient;
 
     @Override
     @Transactional
@@ -91,6 +91,20 @@ public class BasicSyncJobService implements SyncJobService {
             throw new IllegalArgumentException(
                     "작업 일시 범위가 올바르지 않습니다."
             );
+        }
+
+        String cursor = request.getCursor();
+        Long idAfter = request.getIdAfter();
+
+        if (cursor != null && cursor.isBlank()) {
+            throw new IllegalArgumentException("cursor는 빈 문자열일 수 없습니다.");
+        }
+        if (cursor != null && idAfter == null) {
+            throw new IllegalArgumentException("cursor를 전달하면 idAfter도 필요합니다.");
+        }
+        if ("jobTime".equals(sortField) && idAfter != null && cursor == null) {
+            throw new IllegalArgumentException(
+                    "jobTime 정렬에서는 idAfter와 cursor를 함께 전달해야 합니다.");
         }
 
         // 3. 검색 조건 및 전체 데이터 수
@@ -209,7 +223,7 @@ public class BasicSyncJobService implements SyncJobService {
 
          IndexDataClientDto indexDataClientDto = new IndexDataClientDto(infoNames,categoryNames,request.getBaseDateFrom(),request.getBaseDateTo(),worker);
 
-         return publicDataClient.fetchIndexData(indexDataClientDto);
+         return publicDataClient.getObject().fetchIndexData(indexDataClientDto);
     }
 
     @Override

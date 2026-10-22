@@ -10,6 +10,14 @@ public interface AutoSyncConfigRepository
         extends JpaRepository<AutoSyncConfig, Long>,
         AutoSyncConfigCursorRepository {
 
+    @Query("select a.id from AutoSyncConfig a where a.enabled = true order by a.id")
+    java.util.List<Long> findEnabledIds();
+
+    @Modifying
+    @Query("update AutoSyncConfig a set a.lastSyncedAt = :syncedAt where a.id = :id")
+    int updateLastSyncedAt(@Param("id") Long id,
+                          @Param("syncedAt") java.time.LocalDateTime syncedAt);
+
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("""
         update AutoSyncConfig a

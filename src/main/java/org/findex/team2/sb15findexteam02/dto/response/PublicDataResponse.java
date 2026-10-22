@@ -1,6 +1,7 @@
 package org.findex.team2.sb15findexteam02.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -15,6 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PublicDataResponse {
   @JsonProperty("basDt")
+  @JsonFormat(pattern = "yyyyMMdd")
   LocalDate baseDate;
   @JsonProperty("idxNm")
   String infoNames;
@@ -22,7 +24,7 @@ public class PublicDataResponse {
   String categoryNames;
   @JsonProperty("mkp")
   BigDecimal marketPrice;
-  @JsonProperty("dpr")
+  @JsonProperty("clpr")
   BigDecimal dailyPrice;
   @JsonProperty("hipr")
   BigDecimal highPrice;

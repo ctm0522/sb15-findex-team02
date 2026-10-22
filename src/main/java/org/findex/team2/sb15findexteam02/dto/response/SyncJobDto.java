@@ -3,6 +3,7 @@ package org.findex.team2.sb15findexteam02.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.findex.team2.sb15findexteam02.model.JobType;
 import org.findex.team2.sb15findexteam02.model.SyncJob;
 
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class SyncJobDto {

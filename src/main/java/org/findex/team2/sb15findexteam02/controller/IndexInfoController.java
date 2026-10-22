@@ -32,8 +32,7 @@ public class IndexInfoController {
 
     @PostMapping
     public ResponseEntity<IndexInfoDto> create(
-            @RequestBody IndexInfoCreateRequest request,
-            @RequestParam SourceType sourceType
+            @RequestBody IndexInfoCreateRequest request
     ) {
         return ResponseEntity.ok(
                 indexInfoService.create(request, SourceType.USER)
@@ -60,8 +59,7 @@ public class IndexInfoController {
     @PatchMapping("/{id}")
     public ResponseEntity<IndexInfoDto> patch(
             @PathVariable Long id,
-            @RequestBody IndexInfoUpdateRequest request,
-            @RequestParam SourceType sourcType
+            @RequestBody IndexInfoUpdateRequest request
     ) {
         return ResponseEntity.ok(
                 indexInfoService.update(id, request, SourceType.USER)

@@ -23,9 +23,10 @@ public class SyncJobController {
     private final PublicDataClient publicDataClient;
 
     @PostMapping("/index-infos")
-    public ResponseEntity<List<SyncJobDto>> syncIndexInfos() {
+    public ResponseEntity<List<SyncJobDto>> syncIndexInfos(HttpServletRequest request) {
         //워커관련
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(publicDataClient.fetchIndexInfo(String worker));
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(publicDataClient.fetchIndexInfo(request.getRemoteAddr()));
     }
 
     @PostMapping("/index-data")
