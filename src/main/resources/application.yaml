@@ -1,6 +1,6 @@
 spring:
   application:
-  name: sb15-findex-team02
+    name: sb15-findex-team02
 
 
   datasource:
@@ -10,7 +10,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     show-sql: true
 
     properties:
