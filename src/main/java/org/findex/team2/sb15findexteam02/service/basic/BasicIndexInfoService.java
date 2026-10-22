@@ -146,8 +146,8 @@ public class BasicIndexInfoService implements IndexInfoService {
                 : results;
 
         // 10. DTO 변환
-        List<IndexInfoSummaryDto> content = pageContent.stream()
-                .map(IndexInfoSummaryDto::from)
+        List<IndexInfoDto> content = pageContent.stream()
+                .map(IndexInfoDto::from)
                 .toList();
 
         // 11. 다음 커서 생성
@@ -228,7 +228,21 @@ public class BasicIndexInfoService implements IndexInfoService {
     @Transactional
     public IndexInfoDto update(Long id, IndexInfoUpdateRequest request, SourceType sourceType) {
         IndexInfo indexInfo = indexInfoRepository.findById(id).orElseThrow(() -> new NoSuchElementException("해당 id 지수없음 : "+id));
-        indexInfo.update(request.getEmployedItemsCount(),request.getBasePointInTime(),request.getBaseIndex(),request.getFavorite(),sourceType);
+        int employedItemsCount = request.getEmployedItemsCount() == null
+                ? indexInfo.getEmployedItemsCount() : request.getEmployedItemsCount();
+        var basePointTime = request.getBasePointInTime() == null
+                ? indexInfo.getBasePointTime() : request.getBasePointInTime();
+        var baseIndex = request.getBaseIndex() == null
+                ? indexInfo.getBaseIndex() : request.getBaseIndex();
+        boolean favorite = request.getFavorite() == null
+                ? indexInfo.isFavorite() : request.getFavorite();
+
+        boolean informationChanged = employedItemsCount != indexInfo.getEmployedItemsCount()
+                || !Objects.equals(basePointTime, indexInfo.getBasePointTime())
+                || baseIndex.compareTo(indexInfo.getBaseIndex()) != 0;
+
+        indexInfo.update(employedItemsCount, basePointTime, baseIndex, favorite,
+                informationChanged ? sourceType : indexInfo.getSourceType());
         return IndexInfoDto.from(indexInfo);
     }
 

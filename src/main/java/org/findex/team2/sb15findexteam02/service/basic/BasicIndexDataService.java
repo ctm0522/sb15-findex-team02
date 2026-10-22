@@ -13,6 +13,7 @@ import org.findex.team2.sb15findexteam02.dto.response.RankedIndexPerformanceDto;
 import org.findex.team2.sb15findexteam02.model.IndexData;
 import org.findex.team2.sb15findexteam02.model.IndexInfo;
 import org.findex.team2.sb15findexteam02.model.PeriodType;
+import org.findex.team2.sb15findexteam02.model.ChartPeriodType;
 import org.findex.team2.sb15findexteam02.model.SourceType;
 import org.findex.team2.sb15findexteam02.repository.IndexCategoryRepository;
 import org.findex.team2.sb15findexteam02.repository.IndexDataRepository;
@@ -29,14 +30,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.stream.Collectors;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.NoSuchElementException;
@@ -245,16 +242,23 @@ public class BasicIndexDataService implements IndexDataService {
 
     @Override
     @Transactional(readOnly = true)
-    public IndexChartDto Chart(Long id, PeriodType periodType) {
+    public IndexChartDto Chart(Long id, ChartPeriodType periodType) {
+        if (periodType == null) {
+            throw new IllegalArgumentException("periodType이 필요합니다.");
+        }
         IndexInfo info = indexInfoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("지수 정보를 찾을 수 없음: " + id));
         List<IndexData> history = indexDataRepository.findByIndexInfoIdOrderByBaseDateAscIdAsc(id);
-        List<IndexData> sampled = sample(history, periodType);
-        List<ChartDataPoint> points = sampled.stream()
+        LocalDate endDate = LocalDate.now(java.time.ZoneId.of("Asia/Seoul"));
+        LocalDate startDate = endDate.minusMonths(periodType.getMonths());
+        List<ChartDataPoint> points = history.stream()
+                .filter(d -> !d.getBaseDate().isAfter(endDate))
                 .map(d -> new ChartDataPoint(d.getBaseDate(), d.getClosingPrice()))
                 .toList();
         return new IndexChartDto(id, info.getIndexCategory().getCategoryName(),
-                info.getIndexName(), periodType, points, movingAverage(points, 5), movingAverage(points, 20));
+                info.getIndexName(), periodType, chartRange(points, startDate),
+                chartRange(movingAverage(points, 5), startDate),
+                chartRange(movingAverage(points, 20), startDate));
     }
 
     @Override
@@ -372,22 +376,12 @@ public class BasicIndexDataService implements IndexDataService {
         return csv.toString().getBytes(StandardCharsets.UTF_8);
     }
 
-    private List<IndexData> sample(List<IndexData> history, PeriodType period) {
-        if (period == null) throw new IllegalArgumentException("periodType이 필요합니다.");
-        if (period == PeriodType.DAILY) return history;
-        Map<String, IndexData> last = new LinkedHashMap<>();
-        for (IndexData data : history) {
-            LocalDate date = data.getBaseDate();
-            String key;
-            if (period == PeriodType.WEEKLY) {
-                WeekFields wf = WeekFields.ISO;
-                key = date.get(wf.weekBasedYear()) + "-W" + date.get(wf.weekOfWeekBasedYear());
-            } else if (period == PeriodType.MONTHLY) {
-                key = date.getYear() + "-" + date.getMonthValue();
-            } else throw new IllegalArgumentException("지원하지 않는 기간: " + period);
-            last.put(key, data);
-        }
-        return new ArrayList<>(last.values());
+    // The supplied frontend reverses the response before displaying oldest to newest.
+    private List<ChartDataPoint> chartRange(List<ChartDataPoint> points, LocalDate startDate) {
+        return points.stream()
+                .filter(point -> !point.getDate().isBefore(startDate))
+                .sorted(Comparator.comparing(ChartDataPoint::getDate).reversed())
+                .toList();
     }
 
     private List<ChartDataPoint> movingAverage(List<ChartDataPoint> points, int window) {

@@ -22,7 +22,8 @@ public class IndexInfoSpecification {
             List<Predicate> predicates = new ArrayList<>();
 
             // 지수 분류명
-            if (request.getIndexClassification() != null) {
+            if (request.getIndexClassification() != null
+                    && !request.getIndexClassification().isBlank()) {
                 Join<IndexInfo, IndexCategory> category =
                         root.join("indexCategory");
 
@@ -33,7 +34,8 @@ public class IndexInfoSpecification {
             }
 
             // 지수명 부분 검색
-            if (request.getIndexName() != null) {
+            if (request.getIndexName() != null
+                    && !request.getIndexName().isBlank()) {
                 predicates.add(cb.like(
                         root.get("indexName"),
                         "%" + request.getIndexName() + "%"

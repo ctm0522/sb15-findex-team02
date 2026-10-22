@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CursorPageResponseIndexInfoDto {
-    List<IndexInfoSummaryDto> content;
+    List<IndexInfoDto> content;
     String nextCursor;
     Long nextIdAfter;
     Integer size;
