@@ -32,14 +32,19 @@ src
  ┗ main
    ┗ java
      ┗ org.findex.team2.sb15findexteam02
-       ┣ controller # 컨트롤러
-       ┣ dto        # DTO
-       ┃ ┣ request  # 요청 DTO
-       ┃ ┗ response # 응답 DTO
-       ┣ exception  # 예외처리
-       ┣ model      # 엔티티
-       ┣ repository # 레포지토리
-       ┣ service    # 서비스
+       ┣ client        # 외부 API 클라이언트
+       ┣ config        # 설정
+       ┣ controller    # 컨트롤러
+       ┣ dto           # DTO
+       ┃ ┣ request     # 요청 DTO
+       ┃ ┗ response    # 응답 DTO
+       ┣ exception     # 예외처리
+       ┣ mapper        # 매퍼 (DTO-엔티티 변환)
+       ┣ model         # 엔티티
+       ┣ repository    # 레포지토리
+       ┣ scheduler     # 스케줄러
+       ┣ service       # 서비스
+       ┣ specification # Specification (동적 쿼리)
        ┗ Sb15FindexTeam02Application.java
 ```
 처음 시작하는 소규모 프로젝트 이므로, 각자의 실력과 현 상황을 고려하여 레이어 기반 설계 적용
