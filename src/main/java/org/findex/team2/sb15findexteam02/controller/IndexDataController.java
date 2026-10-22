@@ -1,6 +1,8 @@
 package org.findex.team2.sb15findexteam02.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ContentDisposition;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataCreateRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataSearchRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataUpdateRequest;
@@ -15,6 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -33,8 +38,7 @@ public class IndexDataController {
 
     @PostMapping
     public ResponseEntity<IndexDataDto> create(
-            @RequestBody IndexDataCreateRequest request,
-            @RequestParam SourceType sourceType
+            @RequestBody IndexDataCreateRequest request
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(indexDataService.create(request, SourceType.USER));
@@ -51,8 +55,7 @@ public class IndexDataController {
     @PatchMapping("/{id}")
     public ResponseEntity<IndexDataDto> patch(
             @PathVariable Long id,
-            @RequestBody IndexDataUpdateRequest request,
-            @RequestParam SourceType sourceType
+            @RequestBody IndexDataUpdateRequest request
     ) {
         return ResponseEntity.ok(indexDataService.update(id, request, SourceType.USER));
     }
@@ -91,11 +94,19 @@ public class IndexDataController {
     ) {
         byte[] csv = indexDataService.toCSV(request);
 
-        return ResponseEntity.ok().header(
-                HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"index-data.csv\""
-        )
-                .contentType(MediaType.parseMediaType("text/csv"))
-                .body(csv);
+        InputStream inputStream = new ByteArrayInputStream(csv);
+        InputStreamResource resource = new InputStreamResource(inputStream);
+
+        return ResponseEntity.ok()
+                .contentType(new MediaType("text", "csv", StandardCharsets.UTF_8))
+                .contentLength(csv.length)
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        ContentDisposition.attachment()
+                                .filename("index-data.csv", StandardCharsets.UTF_8)
+                                .build()
+                                .toString()
+                )
+                .body(resource);
     }
 }

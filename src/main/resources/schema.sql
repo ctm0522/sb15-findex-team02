@@ -31,7 +31,7 @@ create table index_infos(
     created_at timestamp NOT NULL ,
     updated_at timestamp,
     index_category_id bigint references  index_categories(id) NOT NULL ,
-    index_name varchar(20) NOT NULL ,
+    index_name varchar(100) NOT NULL ,
     employed_items_count int NOT NULL ,
     base_point_time DATE NOT NULL ,
     base_index decimal(20,6) NOT NULL ,

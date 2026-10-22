@@ -9,9 +9,11 @@ import org.findex.team2.sb15findexteam02.dto.request.IndexInfoUpdateRequest;
 import org.findex.team2.sb15findexteam02.dto.response.CursorPageResponseIndexInfoDto;
 import org.findex.team2.sb15findexteam02.dto.response.IndexInfoDto;
 import org.findex.team2.sb15findexteam02.dto.response.IndexInfoSummaryDto;
+import org.findex.team2.sb15findexteam02.model.AutoSyncConfig;
 import org.findex.team2.sb15findexteam02.model.IndexCategory;
 import org.findex.team2.sb15findexteam02.model.IndexInfo;
 import org.findex.team2.sb15findexteam02.model.SourceType;
+import org.findex.team2.sb15findexteam02.repository.AutoSyncConfigRepository;
 import org.findex.team2.sb15findexteam02.repository.IndexCategoryRepository;
 import org.findex.team2.sb15findexteam02.repository.IndexInfoRepository;
 import org.findex.team2.sb15findexteam02.service.IndexInfoService;
@@ -31,6 +33,7 @@ public class BasicIndexInfoService implements IndexInfoService {
 
     private final IndexInfoRepository indexInfoRepository;
     private final IndexCategoryRepository indexCategoryRepository;
+    private final AutoSyncConfigRepository autoSyncConfigRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -75,6 +78,25 @@ public class BasicIndexInfoService implements IndexInfoService {
             throw new IllegalArgumentException(
                     "지원하지 않는 정렬 방향: " + sortDirection
             );
+        }
+
+        String cursor = request.getCursor();
+        Long idAfter = request.getIdAfter();
+        if ((cursor == null) != (idAfter == null)) {
+            throw new IllegalArgumentException("cursor와 idAfter는 함께 전달해야 합니다.");
+        }
+        if (cursor != null) {
+            if (cursor.isBlank()) {
+                throw new IllegalArgumentException("cursor는 빈 문자열일 수 없습니다.");
+            }
+            if ("employedItemsCount".equals(sortField)) {
+                try {
+                    Integer.parseInt(cursor);
+                } catch (NumberFormatException exception) {
+                    throw new IllegalArgumentException(
+                            "employedItemsCount 정렬의 cursor는 정수여야 합니다.", exception);
+                }
+            }
         }
 
         // 3. 검색 조건 생성
@@ -181,6 +203,10 @@ public class BasicIndexInfoService implements IndexInfoService {
         IndexInfo indexInfo = new IndexInfo(category,request.getIndexName(),request.getEmployedItemsCount(),
                 request.getBasePointInTime(),request.getBaseIndex(),sourceType,request.getFavorite());
         IndexInfo createIndexInfo = indexInfoRepository.save(indexInfo);
+
+        AutoSyncConfig autoSyncConfig = new AutoSyncConfig(createIndexInfo);
+        autoSyncConfigRepository.save(autoSyncConfig);
+
 
         return IndexInfoDto.from(createIndexInfo);
     }// todo 나중에 오토싱크 생성 추가 삭제는 ddl cascade가 할 것

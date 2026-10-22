@@ -15,7 +15,7 @@ public class IndexInfo extends BaseUpdatableModel{
     @JoinColumn(name = "index_category_id",nullable = false)
     private IndexCategory indexCategory;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 100, nullable = false)
     private String indexName;
 
     @Column(nullable = false)

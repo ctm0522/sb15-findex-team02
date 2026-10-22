@@ -1,7 +1,7 @@
-package org.findex.team2.sb15findexteam02.service;
+package org.findex.team2.sb15findexteam02.service.basic;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.findex.team2.sb15findexteam02.dto.request.AutoSyncConfigSearchRequest;
 import org.findex.team2.sb15findexteam02.dto.request.AutoSyncConfigUpdateRequest;
@@ -233,7 +233,7 @@ public class AutoSyncConfigService {
             throw new IllegalArgumentException(
                     "cursor 값이 올바르지 않습니다.", e
             );
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new IllegalArgumentException(
                     "cursor 데이터 형식이 올바르지 않습니다.", e
             );
@@ -249,7 +249,7 @@ public class AutoSyncConfigService {
                     .encodeToString(
                             json.getBytes(StandardCharsets.UTF_8)
                     );
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new IllegalStateException(
                     "cursor 생성에 실패했습니다.", e
             );

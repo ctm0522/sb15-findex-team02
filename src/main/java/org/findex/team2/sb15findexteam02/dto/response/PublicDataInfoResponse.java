@@ -1,6 +1,7 @@
 package org.findex.team2.sb15findexteam02.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -19,7 +20,8 @@ public class PublicDataInfoResponse {
   @JsonProperty("idxNm")
   String indexName;
   // 기준 시점
-  @JsonProperty("basDt")
+  @JsonProperty("basPntm")
+  @JsonFormat(pattern = "yyyyMMdd")
   LocalDate basDate;
   // 채용 종목 수
   @JsonProperty("epyItmsCnt")

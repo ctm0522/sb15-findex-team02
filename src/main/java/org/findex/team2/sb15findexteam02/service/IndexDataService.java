@@ -7,7 +7,6 @@ import org.findex.team2.sb15findexteam02.dto.response.*;
 import org.findex.team2.sb15findexteam02.model.IndexData;
 import org.findex.team2.sb15findexteam02.model.PeriodType;
 import org.findex.team2.sb15findexteam02.model.SourceType;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public interface IndexDataService {
     IndexChartDto Chart(Long id, PeriodType periodType);
     List<RankedIndexPerformanceDto> rank(Long id, PeriodType periodType, int limit);
     List<IndexPerformanceDto> favorite(PeriodType periodType);
-    ResponseEntity<?> toCSV(IndexDataSearchRequest request);
+    byte[] toCSV(IndexDataSearchRequest request);
 
 
 }

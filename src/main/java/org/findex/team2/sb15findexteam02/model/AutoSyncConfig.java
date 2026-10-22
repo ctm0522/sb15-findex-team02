@@ -18,9 +18,14 @@ public class AutoSyncConfig extends BaseUpdatableModel{
     @Column(nullable = false)
     private boolean enabled;
 
-    @Column(length = 10, nullable = false)
-    private String schedule;
 
     @Column
     private LocalDateTime lastSyncedAt;
+
+    protected AutoSyncConfig(){}
+
+    public AutoSyncConfig(IndexInfo indexInfo){
+        this.indexInfo=indexInfo;
+        this.enabled=false;
+    }
 }
