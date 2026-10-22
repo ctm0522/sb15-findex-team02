@@ -3,9 +3,9 @@
 ## 팀원 구성
 | 이름 | GitHub |
 |:---:|:---|
-| (최태민) | [Taemin02](https://github.com/ctm0522) |
-| (김민규) | [kmg-git](https://github.com/kmg-git) |
-| (김한민) | [Miiiin06](https://github.com/Miiiin06) |
+| 최태민 | [Taemin02](https://github.com/ctm0522) |
+| 김민규 | [kmg-git](https://github.com/kmg-git) |
+| 김한민 | [Miiiin06](https://github.com/Miiiin06) |
 
 ## 프로젝트 소개
 - 금융위원회 주가 지수 데이터를 연동하여 시계열 차트와 성과 분석 정보를 제공하는 Spring 백엔드 시스템 개발
