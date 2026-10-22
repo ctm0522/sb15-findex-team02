@@ -29,7 +29,6 @@ public class SyncJob extends BaseModel{
     @Column
     private LocalDate targetDate;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "index_info_id",nullable = false)
     private IndexInfo indexInfo;

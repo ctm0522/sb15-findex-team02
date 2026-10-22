@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.findex.team2.sb15findexteam02.model.JobType;
+import org.findex.team2.sb15findexteam02.model.SyncJob;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,4 +20,16 @@ public class SyncJobDto {
     String worker;
     LocalDateTime jobTime;
     String result;
+
+    public static SyncJobDto from(SyncJob syncJob) {
+        return new SyncJobDto(
+                syncJob.getId(),
+                syncJob.getJobType(),
+                syncJob.getIndexInfo().getId(),
+                syncJob.getTargetDate(),
+                syncJob.getWorker(),
+                syncJob.getJobTime(),
+                syncJob.getStatus().name()
+        );
+    }
 }

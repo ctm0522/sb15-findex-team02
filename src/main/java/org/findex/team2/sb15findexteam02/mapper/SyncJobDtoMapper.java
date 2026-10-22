@@ -9,6 +9,6 @@ import org.mapstruct.Mapping;
 public interface SyncJobDtoMapper {
 
     @Mapping(source = "indexInfo.id", target = "indexInfoId")
-    @Mapping(source = "result", target = "result")
-    SyncJobDto toDto(SyncJob syncJob, String result);
+    @Mapping(source = "status", target = "result")
+    SyncJobDto toDto(SyncJob syncJob);
 }

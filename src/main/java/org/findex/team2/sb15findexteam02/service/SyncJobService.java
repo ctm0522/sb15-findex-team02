@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public interface SyncJobService {
-    SyncJobDto create(SyncJobCreateRequest request, String result);
+    SyncJobDto create(SyncJobCreateRequest request);
     CursorPageResponseSyncJobDto findAll(SyncjobSearchRequest request);
 
     List<SyncJobDto> convertToIndexDataClientDtoDto(IndexDataSyncRequest request, String worker);

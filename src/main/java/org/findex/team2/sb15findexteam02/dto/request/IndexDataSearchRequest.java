@@ -10,10 +10,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class IndexDataSearchRequest {
-
+//여기 한민님이 하셨던게 맞았네요 빨리 보다가 실수했나봅니다. 죄송합니다.
     Long indexInfoId;
     LocalDate startDate;
     LocalDate endDate;
+    Long idAfter;
+    String cursor;
     String sortField;
     String sortDirection;
+    Integer size;
 }
