@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+public interface AutoSyncConfigRepository
+        extends JpaRepository<AutoSyncConfig, Long>,
+        AutoSyncConfigCursorRepository {
 
-public interface AutoSyncConfigRepository extends JpaRepository<AutoSyncConfig, Long> {
-
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("""
         update AutoSyncConfig a
         set a.enabled = :enabled
@@ -18,17 +18,6 @@ public interface AutoSyncConfigRepository extends JpaRepository<AutoSyncConfig, 
     """)
     int updateEnabled(
             @Param("id") Long id,
-            @Param("enabled") Boolean enabled
-    );
-
-    @Query("""
-        select a
-        from AutoSyncConfig a
-        where (:indexInfoId is null or a.indexInfo.id = :indexInfoId)
-        and (:enabled is null or a.enabled = :enabled)
-    """)
-    List<AutoSyncConfig> search(
-            @Param("indexInfoId") Long indexInfoId,
             @Param("enabled") Boolean enabled
     );
 }
