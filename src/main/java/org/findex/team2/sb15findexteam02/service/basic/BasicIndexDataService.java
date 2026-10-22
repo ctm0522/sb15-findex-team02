@@ -7,6 +7,8 @@ import org.findex.team2.sb15findexteam02.dto.request.IndexDataUpdateRequest;
 import org.findex.team2.sb15findexteam02.dto.response.CursorPageResponseIndexDataDto;
 import org.findex.team2.sb15findexteam02.dto.response.IndexChartDto;
 import org.findex.team2.sb15findexteam02.dto.response.IndexDataDto;
+import org.findex.team2.sb15findexteam02.dto.response.IndexPerformanceDto;
+import org.findex.team2.sb15findexteam02.dto.response.ChartDataPoint;
 import org.findex.team2.sb15findexteam02.dto.response.RankedIndexPerformanceDto;
 import org.findex.team2.sb15findexteam02.model.IndexData;
 import org.findex.team2.sb15findexteam02.model.IndexInfo;
@@ -17,15 +19,32 @@ import org.findex.team2.sb15findexteam02.repository.IndexDataRepository;
 import org.findex.team2.sb15findexteam02.repository.IndexInfoRepository;
 import org.findex.team2.sb15findexteam02.service.IndexDataService;
 import org.findex.team2.sb15findexteam02.specification.IndexDataSpecification;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.stream.Collectors;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -211,25 +230,206 @@ public class BasicIndexDataService implements IndexDataService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public IndexChartDto Chart(Long id, PeriodType periodType) {
-
-        return null;
+        IndexInfo info = indexInfoRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("지수 정보를 찾을 수 없음: " + id));
+        List<IndexData> history = indexDataRepository.findByIndexInfoIdOrderByBaseDateAscIdAsc(id);
+        List<IndexData> sampled = sample(history, periodType);
+        List<ChartDataPoint> points = sampled.stream()
+                .map(d -> new ChartDataPoint(d.getBaseDate(), d.getClosingPrice()))
+                .toList();
+        return new IndexChartDto(id, info.getIndexCategory().getCategoryName(),
+                info.getIndexName(), periodType, points, movingAverage(points, 5), movingAverage(points, 20));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<RankedIndexPerformanceDto> rank(Long id, PeriodType periodType, int limit) {
-        return List.of();
+        if (limit < 1) throw new IllegalArgumentException("limit은 1 이상이어야 합니다.");
+        List<IndexInfo> infos = id == null
+                ? indexInfoRepository.findAll()
+                : List.of(indexInfoRepository.findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("지수 정보를 찾을 수 없음: " + id)));
+        List<IndexPerformanceDto> performances = infos.stream()
+                .map(info -> performance(info, periodType))
+                .filter(java.util.Objects::nonNull)
+                .sorted(Comparator.comparing(IndexPerformanceDto::getFluctuationRate).reversed()
+                        .thenComparing(IndexPerformanceDto::getIndexInfoId))
+                .limit(limit)
+                .toList();
+        List<RankedIndexPerformanceDto> ranked = new ArrayList<>();
+        for (int i = 0; i < performances.size(); i++) {
+            ranked.add(new RankedIndexPerformanceDto(performances.get(i), i + 1));
+        }
+        return ranked;
     }
 
     @Override
-    public List<RankedIndexPerformanceDto> favorite(PeriodType periodType) {
-        return List.of();
+    @Transactional(readOnly = true)
+    public List<IndexPerformanceDto> favorite(PeriodType periodType) {
+        return indexInfoRepository.findAll().stream()
+                .filter(IndexInfo::isFavorite)
+                .map(info -> performance(info, periodType))
+                .filter(java.util.Objects::nonNull)
+                .toList();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ResponseEntity<?> toCSV(IndexDataSearchRequest request) {
-        return null;
+
+        String field = request.getSortField() == null
+                ? "baseDate"
+                : request.getSortField();
+
+        String direction = request.getSortDirection() == null
+                ? "desc"
+                : request.getSortDirection().toLowerCase(Locale.ROOT);
+
+        Set<String> allowedFields = Set.of(
+                "baseDate", "marketPrice", "closingPrice",
+                "highPrice", "lowPrice", "versus",
+                "fluctuationRate", "tradingQuantity",
+                "tradingPrice", "marketTotalAmount"
+        );
+
+        if (!allowedFields.contains(field)) {
+            throw new IllegalArgumentException(
+                    "지원하지 않는 정렬 필드: " + field
+            );
+        }
+
+        if (!Set.of("asc", "desc").contains(direction)) {
+            throw new IllegalArgumentException(
+                    "지원하지 않는 정렬 방향: " + direction
+            );
+        }
+
+        if (request.getStartDate() != null
+                && request.getEndDate() != null
+                && request.getStartDate().isAfter(request.getEndDate())) {
+            throw new IllegalArgumentException(
+                    "시작 날짜가 종료 날짜보다 늦습니다."
+            );
+        }
+
+        Sort.Direction sortDirection = direction.equals("asc")
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
+
+        Sort sort = Sort.by(sortDirection, field)
+                .and(Sort.by(sortDirection, "id"));
+
+        // 검색 조건에 맞는 전체 데이터 조회
+        List<IndexData> data = indexDataRepository.findAll(
+                IndexDataSpecification.search(request),
+                sort
+        );
+
+        // CSV 생성
+        StringBuilder csv = new StringBuilder("\uFEFF");
+
+        csv.append(
+                "id,indexInfoId,baseDate,sourceType,"
+                        + "marketPrice,closingPrice,highPrice,lowPrice,"
+                        + "versus,fluctuationRate,tradingQuantity,"
+                        + "tradingPrice,marketTotalAmount\r\n"
+        );
+
+        for (IndexData d : data) {
+            csv.append(d.getId()).append(',')
+                    .append(d.getIndexInfo().getId()).append(',')
+                    .append(d.getBaseDate()).append(',')
+                    .append(d.getSourceType()).append(',')
+                    .append(d.getMarketPrice()).append(',')
+                    .append(d.getClosingPrice()).append(',')
+                    .append(d.getHighPrice()).append(',')
+                    .append(d.getLowPrice()).append(',')
+                    .append(d.getVersus()).append(',')
+                    .append(d.getFluctuationRate()).append(',')
+                    .append(d.getTradingQuantity()).append(',')
+                    .append(d.getTradingPrice()).append(',')
+                    .append(d.getMarketTotalAmount())
+                    .append("\r\n");
+        }
+
+        // CSV 문자열을 바이트 배열로 변환
+        byte[] bytes = csv.toString().getBytes(StandardCharsets.UTF_8);
+
+        // 다운로드 리소스 생성
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+        InputStreamResource resource = new InputStreamResource(inputStream);
+
+        return ResponseEntity.ok()
+                .contentType(
+                        new MediaType("text", "csv", StandardCharsets.UTF_8)
+                )
+                .contentLength(bytes.length)
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        ContentDisposition.attachment()
+                                .filename("index-data.csv", StandardCharsets.UTF_8)
+                                .build()
+                                .toString()
+                )
+                .body(resource);
     }
 
+    private List<IndexData> sample(List<IndexData> history, PeriodType period) {
+        if (period == null) throw new IllegalArgumentException("periodType이 필요합니다.");
+        if (period == PeriodType.DAILY) return history;
+        Map<String, IndexData> last = new LinkedHashMap<>();
+        for (IndexData data : history) {
+            LocalDate date = data.getBaseDate();
+            String key;
+            if (period == PeriodType.WEEKLY) {
+                WeekFields wf = WeekFields.ISO;
+                key = date.get(wf.weekBasedYear()) + "-W" + date.get(wf.weekOfWeekBasedYear());
+            } else if (period == PeriodType.MONTHLY) {
+                key = date.getYear() + "-" + date.getMonthValue();
+            } else throw new IllegalArgumentException("지원하지 않는 기간: " + period);
+            last.put(key, data);
+        }
+        return new ArrayList<>(last.values());
+    }
 
+    private List<ChartDataPoint> movingAverage(List<ChartDataPoint> points, int window) {
+        List<ChartDataPoint> result = new ArrayList<>();
+        BigDecimal sum = BigDecimal.ZERO;
+        for (int i = 0; i < points.size(); i++) {
+            sum = sum.add(points.get(i).getValue());
+            if (i >= window) sum = sum.subtract(points.get(i - window).getValue());
+            if (i >= window - 1) {
+                result.add(new ChartDataPoint(points.get(i).getDate(),
+                        sum.divide(BigDecimal.valueOf(window), 6, RoundingMode.HALF_UP)));
+            }
+        }
+        return result;
+    }
+
+    // 기간 성과: 최신 거래일 종가와 해당 기간 전(또는 그 이전 가장 가까운 거래일) 종가 비교.
+    private IndexPerformanceDto performance(IndexInfo info, PeriodType period) {
+        List<IndexData> history = indexDataRepository.findByIndexInfoIdOrderByBaseDateAscIdAsc(info.getId());
+        if (history.isEmpty()) return null;
+        IndexData latest = history.get(history.size() - 1);
+        LocalDate target = switch (period) {
+            case DAILY -> latest.getBaseDate().minusDays(1);
+            case WEEKLY -> latest.getBaseDate().minusWeeks(1);
+            case MONTHLY -> latest.getBaseDate().minusMonths(1);
+        };
+        IndexData previous = null;
+        for (IndexData d : history) {
+            if (!d.getBaseDate().isAfter(target)) previous = d;
+            else break;
+        }
+        if (previous == null || previous.getClosingPrice().signum() == 0) return null;
+        BigDecimal current = latest.getClosingPrice();
+        BigDecimal before = previous.getClosingPrice();
+        BigDecimal diff = current.subtract(before);
+        BigDecimal rate = diff.multiply(BigDecimal.valueOf(100))
+                .divide(before, 6, RoundingMode.HALF_UP);
+        return new IndexPerformanceDto(info.getId(), info.getIndexCategory().getCategoryName(),
+                info.getIndexName(), diff, rate, current, before);
+    }
 }

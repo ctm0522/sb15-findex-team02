@@ -35,11 +35,11 @@ public class BasicSyncJobService implements SyncJobService {
 
     @Override
     @Transactional
-    public SyncJobDto create(SyncJobCreateRequest request, String result) {
+    public SyncJobDto create(SyncJobCreateRequest request) {
         SyncJob syncJob = new SyncJob(request.getStatus(), request.getWorker(), request.getJobType(),
                 request.getTargetDate(),  request.getIndexInfo());
         SyncJob createSyncJob = syncJobRepository.save(syncJob);
-        return syncJobDtoMapper.toDto(createSyncJob,result);
+        return syncJobDtoMapper.toDto(createSyncJob);
     }
 
     @Override
@@ -208,14 +208,14 @@ public class BasicSyncJobService implements SyncJobService {
         });
 
          IndexDataClientDto indexDataClientDto = new IndexDataClientDto(infoNames,categoryNames,request.getBaseDateFrom(),request.getBaseDateTo(),worker);
-         publicDataClient.fetchIndexData(indexDataClientDto);
-         return null;
+
+         return publicDataClient.fetchIndexData(indexDataClientDto);
     }
 
     @Override
     @Transactional
     public List<SyncJobDto> syncInfo(List<PublicDataInfoResponse> requests, String worker, ResultType status) {
-        String result;
+
         IndexInfo indexInfo;
         SyncJobDto syncJobDto;
         List<SyncJobDto> dtos = new ArrayList<>();
@@ -223,17 +223,16 @@ public class BasicSyncJobService implements SyncJobService {
             if(indexInfoRepository.existsByIndexNameAndIndexCategoryCategoryName(entry.getIndexName(),entry.getIndexClassification())){
                 indexInfo = indexInfoRepository.findByIndexNameAndIndexCategoryCategoryName(entry.getIndexName(),entry.getIndexClassification()).get();
                 indexInfo.update(entry.getEmployedItemCount(),entry.getBasDate(),entry.getBaseIndex(),indexInfo.isFavorite(),SourceType.OPEN_API);
-                result = "UPDATE";
+
             } else {
                 IndexInfoCreateRequest indexInfoCreateRequest = new IndexInfoCreateRequest(entry.getIndexClassification(),entry.getIndexName(),
                         entry.getEmployedItemCount(),entry.getBasDate(),entry.getBaseIndex(),false);
                 IndexInfoDto indexInfoDto = indexInfoService.create(indexInfoCreateRequest, SourceType.OPEN_API);
                 indexInfo = indexInfoRepository.findById(indexInfoDto.getId()).
                         orElseThrow(() -> new NoSuchElementException("지수 찾을 수 없음 : " + indexInfoDto.getId()));
-                result = "NEW";
             }
             SyncJobCreateRequest syncJobCreateRequest = new SyncJobCreateRequest(status,worker, JobType.INDEX_INFO, null, indexInfo);
-            syncJobDto = create(syncJobCreateRequest,result);
+            syncJobDto = create(syncJobCreateRequest);
             dtos.add(syncJobDto);
 
         }
@@ -248,7 +247,7 @@ public class BasicSyncJobService implements SyncJobService {
     @Override
     @Transactional
     public List<SyncJobDto> syncData(List<PublicDataResponse> requests, String worker, ResultType status) {
-        String result;
+
         IndexInfo indexInfo;
         IndexData indexData;
         SyncJobDto syncJobDto;
@@ -264,7 +263,7 @@ public class BasicSyncJobService implements SyncJobService {
                 indexData.update(entry.getMarketPrice(),entry.getDailyPrice(),entry.getHighPrice(),entry.getLowPrice(),
                         entry.getVs(),entry.getFluctuationRate(),entry.getTradingQuantity(),entry.getTradingPrice(),entry.getMarketTotalAmount(),SourceType.OPEN_API);
 
-                result = "UPDATE";
+
 
             }
             else {
@@ -273,11 +272,11 @@ public class BasicSyncJobService implements SyncJobService {
                         entry.getTradingQuantity(),entry.getTradingPrice(),entry.getMarketTotalAmount());
 
                 indexDataService.create(indexDataCreateRequest, SourceType.OPEN_API);
-                result = "NEW";
+
             }
 
             SyncJobCreateRequest syncJobCreateRequest = new SyncJobCreateRequest(status,worker, JobType.INDEX_DATA, entry.getBaseDate(), indexInfo);
-            syncJobDto = create(syncJobCreateRequest,result);
+            syncJobDto = create(syncJobCreateRequest);
             dtos.add(syncJobDto);
 
         }

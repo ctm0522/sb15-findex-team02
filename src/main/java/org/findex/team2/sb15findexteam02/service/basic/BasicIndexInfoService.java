@@ -207,6 +207,7 @@ public class BasicIndexInfoService implements IndexInfoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<IndexInfoSummaryDto> summaries() {
         List<IndexInfo> indexInfos = indexInfoRepository.findAll();
         List<IndexInfoSummaryDto> summaryDtos = new ArrayList<>();
