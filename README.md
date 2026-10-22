@@ -23,6 +23,9 @@
 
 김한민: 각 도메인별 Controller 구현, 자동 연동 설정 공동 구현
 
+## ER 다이어그램
+<img width="734" height="628" alt="image" src="https://github.com/user-attachments/assets/7a37bb19-99cc-41a0-8542-52cf69ffd2f3" />
+
 ## 파일 구조
 ```
 src
