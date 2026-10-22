@@ -54,8 +54,6 @@ public class PublicDataClient {
         responses.add(singleResponse);
         status = ResultType.SUCCESS;
       }
-
-      responses.add(singleResponse);
     } catch (Exception e) {
       log.error("지수 정보 연동 실패", e);
     }
@@ -94,7 +92,6 @@ public class PublicDataClient {
           responses.add(response);
           status = ResultType.SUCCESS;
         }
-        responses.add(response);
       } catch (Exception e) {
         log.error("지수 정보 연동 실패", e);
       }
