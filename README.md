@@ -1,5 +1,5 @@
 # 2조
-[노션 페이지](https://app.notion.com/p/ee89c8524dc58272aad1010f305f3a4b?source=copy_link)
+[노션 페이지](https://app.notion.com/p/ee89c8524dc58272aad1010f305f3a4b?source=copy_link) : Gantt 차트를 적용한 노션 협업 페이지
 ## 팀원 구성
 | 이름 | GitHub |
 |:---:|:---|
