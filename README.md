@@ -19,7 +19,7 @@
 ## 팀원별 구현 기능 상세
 최태민: 외부 API 통신 Client 구현, 외부 API에 필요한 DTO 설계, 자동 연동 설정 공동 구현
 
-김민규: 각 도메인 별 Service, Repository 구현
+김민규: JPA 엔티티 맵핑,  CRUD구현(지수 정보, 지수 데이터, 연동 작업),  Method Flow 설계
 
 김한민: 각 도메인별 Controller 구현, 자동 연동 설정 공동 구현
 
