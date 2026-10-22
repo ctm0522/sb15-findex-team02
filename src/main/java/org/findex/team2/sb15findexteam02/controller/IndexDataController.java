@@ -8,6 +8,7 @@ import org.findex.team2.sb15findexteam02.dto.request.IndexDataSearchRequest;
 import org.findex.team2.sb15findexteam02.dto.request.IndexDataUpdateRequest;
 import org.findex.team2.sb15findexteam02.dto.response.*;
 import org.findex.team2.sb15findexteam02.model.PeriodType;
+import org.findex.team2.sb15findexteam02.model.ChartPeriodType;
 import org.findex.team2.sb15findexteam02.model.SourceType;
 import org.findex.team2.sb15findexteam02.service.IndexDataService;
 import org.springframework.http.HttpHeaders;
@@ -63,7 +64,7 @@ public class IndexDataController {
     @GetMapping("/{id}/chart")
     public ResponseEntity<IndexChartDto> Chart(
             @PathVariable Long id,
-            @RequestParam(defaultValue = "DAILY") PeriodType periodType
+            @RequestParam(defaultValue = "MONTHLY") ChartPeriodType periodType
     ) {
         return ResponseEntity.ok(indexDataService.Chart(id, periodType));
     }
