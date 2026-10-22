@@ -39,6 +39,7 @@ src
        ┣ service
        ┗ Sb15FindexTeam02Application.java
 ```
+처음 시작하는 소규모 프로젝트 이므로, 각자의 실력과 현 상황을 고려하여 레이어 기반 설계 적용
 
 ## 구현 홈페이지
 (링크)
