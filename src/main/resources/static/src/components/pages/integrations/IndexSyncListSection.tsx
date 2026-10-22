@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { patchAutoSyncConfigs } from "@/api/syncApi";
 import { IndexJobStatusOptions } from "@/constants/integrationsLabels";
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
@@ -11,6 +11,7 @@ import { Table } from "../../common/table/Table";
 import { Toggle } from "../../common/toggle/toggle";
 
 export const IndexSyncListSection = () => {
+  const scrollRootRef = useRef<HTMLDivElement | null>(null);
   const { items: indexInfoItems, fetch: fetchInfoItems } =
     useIndexInfoSummaryStore();
   const {
@@ -51,6 +52,7 @@ export const IndexSyncListSection = () => {
     hasNext,
     isLoading: isLoadingIndexItems,
     onLoadMore: fetchNextIndexItems,
+    rootRef: scrollRootRef,
     rootMargin: "0px 0px 200px 0px",
   });
 
@@ -138,7 +140,7 @@ export const IndexSyncListSection = () => {
           {(item) => <Select.Item id={item.id}>{item.label}</Select.Item>}
         </Select>
       </div>
-      <div className="scrollbar-thin flex min-h-0 flex-1 flex-col overflow-y-auto bg-white">
+      <div ref={scrollRootRef} className="scrollbar-thin flex min-h-0 flex-1 flex-col overflow-y-auto bg-white">
         <Table aria-label="자동 연동 지수 목록" selectionMode="none">
           <Table.Header>
             <Table.Head id="index" label="지수" isRowHeader />
@@ -170,7 +172,7 @@ export const IndexSyncListSection = () => {
           </Table.Body>
         </Table>
 
-        {hasNext && <div ref={loadMoreRef} className="h-4" />}
+        {hasNext && <div ref={loadMoreRef} className="h-4 min-h-4 shrink-0" />}
 
         {!isLoadingIndexItems && indexItems.length === 0 && (
           <div className="flex flex-1 flex-col items-center justify-center">
