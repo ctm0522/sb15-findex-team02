@@ -14,7 +14,7 @@
 ## 기술 스택
 - Backend: Spring Boot, Spring Security, Spring Data JPA
 - Database: PostgreSQL
-- 공통 Tool: Git & Github, Discord
+- 공통 Tool: Git & Github, Discord, Notion
 
 ## 팀원별 구현 기능 상세
 최태민: 외부 API 통신 Client 구현, 외부 API에 필요한 DTO 설계, 자동 연동 설정 공동 구현
