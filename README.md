@@ -25,7 +25,7 @@
 
 
 ## ER 다이어그램
-<img width="734" height="628" alt="image" src="https://github.com/user-attachments/assets/7a37bb19-99cc-41a0-8542-52cf69ffd2f3" />
+<img width="1032" height="817" alt="image" src="https://github.com/user-attachments/assets/b70e69d6-ada2-4946-b7c5-6531b9ff3218" />
 
 ## 파일 구조
 ```
